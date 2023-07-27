@@ -11,10 +11,10 @@
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/symfony/src/Controller/WelcomeContrillerController.php'|file_link(0) }}">src/Controller/WelcomeContrillerController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/symfony/templates/welcome_contriller/index.html.twig'|file_link(0) }}">templates/welcome_contriller/index.html.twig</a></code></li>
-    </ul>
+   {% if app.user %}
+       Welcome {{ app.user.username }}
+   {% else %}
+       no user
+   {% endif %}
 </div>
 {% endblock %}

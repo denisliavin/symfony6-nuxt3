@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+    db:
+        image: mysql:8.0.33
+        platform: linux/x86_64
+        volumes:
+          - "/dbdata:/var/lib/mysql"
+        environment:
+            MYSQL_ROOT_PASSWORD: secret_password
+            MYSQL_DATABASE: project1
+            MYSQL_USER: project1
+            MYSQL_PASSWORD: a123456
+        ports:
+            - 3306:3306
+    php:
+        build:
+            context: ./php
+            args:
+                TIMEZONE: ${TIMEZONE}
+        volumes:
+            - ../:/var/www/symfony:cached
+    nginx:
+        build:
+            context: ./nginx
+        volumes:
+            - ../:/var/www/symfony:cached
+        ports:
+            - 81:80
+        env_file:
+            - .env.nginx.local
+    adminer:
+      image: adminer
+      restart: always
+      ports:
+        - 6080:8080

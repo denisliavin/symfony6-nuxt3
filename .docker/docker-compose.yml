@@ -34,3 +34,9 @@ services:
       restart: always
       ports:
         - 6080:8080
+    mailhog:
+      image: mailhog/mailhog:latest
+      container_name: myapp-mailhog_sn
+      ports:
+        - "8003:1025"
+        - "8100:8025"

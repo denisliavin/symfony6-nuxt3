@@ -40,3 +40,12 @@ services:
       ports:
         - "8003:1025"
         - "8100:8025"
+    node:
+      image: "node:18.17.0"
+      working_dir: /www
+      expose:
+        - "8080"
+      ports:
+        - "8080:8080"
+      volumes:
+        - ./../_frontend:/www

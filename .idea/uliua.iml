@@ -89,5 +89,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="bootstrap-shop-template" />
+    <orderEntry type="module" module-name="frontend" />
   </component>
 </module>

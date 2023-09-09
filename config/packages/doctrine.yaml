@@ -1,5 +1,7 @@
 doctrine:
     dbal:
+        types:
+#            custom_first:  'App\Model\Test\Entity\IdType'
         url: '%env(resolve:DATABASE_URL)%'
 
         # IMPORTANT: You MUST configure your server version,
@@ -20,6 +22,16 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            App1:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Model/Test/Entity'
+                prefix: 'App\Model\Test\Entity'
+                alias: App1
+            App2:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Model/Test2/Entity'
+                prefix: 'App\Model\Test2\Entity'
+                alias: App2
 
 when@test:
     doctrine:

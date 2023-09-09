@@ -5,6 +5,7 @@
       <module fileurl="file://$USER_HOME$/Загрузки/bootstrap-shop-template/.idea/bootstrap-shop-template.iml" filepath="$USER_HOME$/Загрузки/bootstrap-shop-template/.idea/bootstrap-shop-template.iml" />
       <module fileurl="file://$PROJECT_DIR$/../demo-project-manager/.idea/demo-project-manager.iml" filepath="$PROJECT_DIR$/../demo-project-manager/.idea/demo-project-manager.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/uliua.iml" filepath="$PROJECT_DIR$/.idea/uliua.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../vue/.idea/vue.iml" filepath="$PROJECT_DIR$/../vue/.idea/vue.iml" />
     </modules>
   </component>
 </project>

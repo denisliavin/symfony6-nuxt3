@@ -77,7 +77,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <button @click.prevent="login" class="btn">Submit</button>
+                                    <button @click.prevent="tryLogin" class="btn">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -87,26 +87,31 @@
         </div>
         <!-- Login End -->
 </template>
-
 <script setup>
 import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
-import { useAuthStore } from '~/store'; // import the auth store we just created
+import { useUserStore } from '~/store/user'; // import the auth store we just created
 
-const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
-
-const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
+const { login } = useUserStore(); // use authenticateUser action from  auth store
 
 const user = ref({
-    username: 'kminchelle',
-    password: '0lelplR',
+    username: 'dddddddd@www.www',
+    password: 'dddddddd',
+    errorText: '',
 });
 const router = useRouter();
 
-const login = async () => {
-    await authenticateUser(user.value); // call authenticateUser and pass the user object
-    // redirect to homepage if user is authenticated
-    if (authenticated) {
+const tryLogin = async () => {
+    let data = await login(user.value);
+
+    if(data.res){
+        user.login = '';
+        user.password = '';
+        user.errorText = '';
+
         router.push('/my-account');
+    }
+    else{
+        user.errorText = data.errors.join(',');
     }
 };
 </script>

@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Model\Test2\Entity;
+namespace App\Model\Order\Entity;
 
-use App\Repository\OrderRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: '`table3`')]
-class Table2
+#[ORM\Table(name: '`order`')]
+class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

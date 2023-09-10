@@ -17,11 +17,16 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Model/Test/Entity/'
-            - '../src/Model/Test2/Entity/'
+            - '../src/Model/User/Entity/User'
+            - '../src/Model/RefreshToken/Entity/'
+            - '../src/Model/Coupon/Entity/'
+            - '../src/Model/Order/Entity/'
             - '../src/Kernel.php'
-
+    
+    App\Model\User\Entity\User\UserRepository: ~
+    App\Model\Order\Entity\OrderRepository: ~
+    App\Model\Coupon\Entity\CouponRepository: ~
+    
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     Symfony\Component\HttpFoundation\Session\Session:

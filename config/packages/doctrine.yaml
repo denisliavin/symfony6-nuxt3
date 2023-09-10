@@ -1,7 +1,7 @@
 doctrine:
     dbal:
         types:
-#            custom_first:  'App\Model\Test\Entity\IdType'
+#            coupon_id:  'App\Model\Coupon\Entity\IdType'
         url: '%env(resolve:DATABASE_URL)%'
 
         # IMPORTANT: You MUST configure your server version,
@@ -17,21 +17,26 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
-            App:
+            User:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
-            App1:
+                dir: '%kernel.project_dir%/src/Model/User/Entity/User'
+                prefix: 'App\Model\User\Entity\User'
+                alias: App4
+            RefreshToken:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Model/Test/Entity'
-                prefix: 'App\Model\Test\Entity'
-                alias: App1
-            App2:
+                dir: '%kernel.project_dir%/src/Model/RefreshToken/Entity'
+                prefix: 'App\Model\RefreshToken\Entity'
+                alias: RefreshToken
+            Coupon:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Model/Test2/Entity'
-                prefix: 'App\Model\Test2\Entity'
-                alias: App2
+                dir: '%kernel.project_dir%/src/Model/Coupon/Entity'
+                prefix: 'App\Model\Coupon\Entity'
+                alias: Coupon    
+            Order:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Model/Order/Entity'
+                prefix: 'App\Model\Order\Entity'
+                alias: Order    
 
 when@test:
     doctrine:

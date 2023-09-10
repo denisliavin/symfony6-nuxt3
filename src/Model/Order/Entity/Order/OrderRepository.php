@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Order\Entity;
+namespace App\Model\Order\Entity\Order;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

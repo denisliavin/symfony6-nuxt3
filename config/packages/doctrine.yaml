@@ -24,18 +24,18 @@ doctrine:
                 alias: App4
             RefreshToken:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Model/RefreshToken/Entity'
-                prefix: 'App\Model\RefreshToken\Entity'
+                dir: '%kernel.project_dir%/src/Model/RefreshToken/Entity/RefreshToken'
+                prefix: 'App\Model\RefreshToken\Entity\RefreshToken'
                 alias: RefreshToken
             Coupon:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Model/Coupon/Entity'
-                prefix: 'App\Model\Coupon\Entity'
+                dir: '%kernel.project_dir%/src/Model/Coupon/Entity/Coupon'
+                prefix: 'App\Model\Coupon\Entity\Coupon'
                 alias: Coupon    
             Order:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Model/Order/Entity'
-                prefix: 'App\Model\Order\Entity'
+                dir: '%kernel.project_dir%/src/Model/Order/Entity/Order'
+                prefix: 'App\Model\Order\Entity\Order'
                 alias: Order    
 
 when@test:

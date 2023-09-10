@@ -2,8 +2,8 @@
 
 namespace App\Controller\Admin;
 
-use App\Model\Coupon\Entity\Coupon;
-use App\Model\Order\Entity\Order;
+use App\Model\Coupon\Entity\Coupon\Coupon;
+use App\Model\Order\Entity\Order\Order;
 use App\Model\User\Entity\User\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;

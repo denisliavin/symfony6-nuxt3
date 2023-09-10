@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Coupon\Entity;
+namespace App\Model\Coupon\Entity\Coupon;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;

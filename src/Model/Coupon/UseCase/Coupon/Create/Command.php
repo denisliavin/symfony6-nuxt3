@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Model\Coupon\UseCase\Coupon\Create;
 
-use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-
-class CouponCommand
+class Command
 {
     public $id;
     public $name;
@@ -27,6 +25,11 @@ class CouponCommand
     public function setName($name)
     {
         return $this->name = $name;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getSale()

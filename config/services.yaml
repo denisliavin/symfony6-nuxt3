@@ -18,14 +18,14 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Model/User/Entity/User'
-            - '../src/Model/RefreshToken/Entity/'
-            - '../src/Model/Coupon/Entity/'
-            - '../src/Model/Order/Entity/'
+            - '../src/Model/RefreshToken/Entity/RefreshToken/'
+            - '../src/Model/Coupon/Entity/Coupon/'
+            - '../src/Model/Order/Entity/Order/'
             - '../src/Kernel.php'
     
     App\Model\User\Entity\User\UserRepository: ~
-    App\Model\Order\Entity\OrderRepository: ~
-    App\Model\Coupon\Entity\CouponRepository: ~
+    App\Model\Order\Entity\Order\OrderRepository: ~
+    App\Model\Coupon\Entity\Coupon\CouponRepository: ~
     
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

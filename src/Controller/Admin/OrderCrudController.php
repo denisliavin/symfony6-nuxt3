@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Model\Order\Entity\Order;
+use App\Model\Order\Entity\Order\Order;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class OrderCrudController extends AbstractCrudController

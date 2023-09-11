@@ -21,6 +21,8 @@ services:
             - '../src/Model/RefreshToken/Entity/RefreshToken/'
             - '../src/Model/Coupon/Entity/Coupon/'
             - '../src/Model/Order/Entity/Order/'
+            - '../src/Model/Image/Entity/Image/'
+            - '../src/Model/Feature/Entity/Feature/'
             - '../src/Kernel.php'
     
     App\Model\User\Entity\User\UserRepository: ~

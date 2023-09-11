@@ -36,7 +36,17 @@ doctrine:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Model/Order/Entity/Order'
                 prefix: 'App\Model\Order\Entity\Order'
-                alias: Order    
+                alias: Order 
+            Image:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Model/Image/Entity/Image'
+                prefix: 'App\Model\Image\Entity\Image'
+                alias: Image    
+            Feature:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Model/Feature/Entity/Feature'
+                prefix: 'App\Model\Feature\Entity\Feature'
+                alias: Feature    
 
 when@test:
     doctrine:

@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Model\Coupon\Entity\Coupon\Coupon;
+use App\Model\Feature\Entity\Feature\Feature;
+use App\Model\Feature\Entity\Feature\FeatureValue;
 use App\Model\Order\Entity\Order\Order;
 use App\Model\User\Entity\User\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -48,5 +50,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Orders', 'fas fa-list', Order::class);
         yield MenuItem::linkToCrud('Coupons', 'fas fa-list', Coupon::class);
+        yield MenuItem::linkToCrud('Features', 'fas fa-list', Feature::class);
+        yield MenuItem::linkToCrud('Features Values', 'fas fa-list', FeatureValue::class);
     }
 }

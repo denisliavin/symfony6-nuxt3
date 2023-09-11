@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Coupon\UseCase\Coupon\Create;
+namespace App\Model\Coupon\UseCase\Coupon\Edit;
 
-use App\Model\Coupon\Entity\Coupon\Coupon;
 use App\Model\Coupon\Entity\Coupon\CouponRepository;
 use App\Model\Coupon\Entity\Coupon\Sale;
 use App\Model\Flusher;
@@ -22,11 +21,13 @@ class Handler
 
     public function handle(Command $command): void
     {
-        if ($this->coupons->hasByCode($command->code)) {
+        $coupon = $this->coupons->get($command->id);
+
+        if ($this->coupons->hasByCodeAndId($command->code, $command->id)) {
             throw new \DomainException('Coupon with this code already exists.');
         }
 
-        $coupon = new Coupon(
+        $coupon->edit(
             $command->name,
             $command->code,
             new Sale(
@@ -35,7 +36,6 @@ class Handler
             )
         );
 
-        $this->coupons->add($coupon);
         $this->flusher->flush();
     }
 }

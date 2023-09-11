@@ -5,19 +5,20 @@ namespace App\Model\Coupon\Entity\Coupon;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Embedded;
+use Webmozart\Assert\Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table("coupons")
  */
-#[ORM\Entity(repositoryClass: CouponRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'coupons')]
 class Coupon
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private $id;
+    private ?int $id = null;
 
     #[Column(type: "string")]
     private string $name;
@@ -27,6 +28,26 @@ class Coupon
 
     #[Embedded(class: Sale::class)]
     private Sale $sale;
+
+    public function __construct($name, $code, Sale $sale)
+    {
+        Assert::notEmpty($name);
+        Assert::notEmpty($code);
+
+        $this->name = $name;
+        $this->code = $code;
+        $this->sale = $sale;
+    }
+
+    public function edit($name, $code, Sale $sale)
+    {
+        Assert::notEmpty($name);
+        Assert::notEmpty($code);
+
+        $this->name = $name;
+        $this->code = $code;
+        $this->sale = $sale;
+    }
 
     public function getId(): ?string
     {

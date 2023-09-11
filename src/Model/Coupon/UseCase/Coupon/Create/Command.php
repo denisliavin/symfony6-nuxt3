@@ -4,7 +4,6 @@ namespace App\Model\Coupon\UseCase\Coupon\Create;
 
 class Command
 {
-    public $id;
     public $name;
     public $code;
     public $sale;
@@ -12,28 +11,15 @@ class Command
     /**
      * @return mixed
      */
-    public function __construct($id)
+    public function __construct()
     {
-        $obj = new \stdClass();
-        $obj->type = '';
-        $obj->value = null;
-
-        $this->id = $id;
-        $this->sale = $obj;
-    }
-
-    public function setName($name)
-    {
-        return $this->name = $name;
+        $this->sale = new \stdClass();
+        $this->sale->type = '';
+        $this->sale->value = null;
     }
 
     public function getId()
     {
-        return $this->id;
-    }
-
-    public function getSale()
-    {
-        return $this->sale;
+        return $this->name;
     }
 }

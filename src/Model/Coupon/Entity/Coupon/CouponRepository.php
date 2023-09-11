@@ -2,46 +2,59 @@
 
 namespace App\Model\Coupon\Entity\Coupon;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Model\EntityNotFoundException;
+use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * @extends ServiceEntityRepository<Order>
- *
- * @method Coupon|null find($id, $lockMode = null, $lockVersion = null)
- * @method Coupon|null findOneBy(array $criteria, array $orderBy = null)
- * @method Coupon[]    findAll()
- * @method Coupon[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class CouponRepository extends ServiceEntityRepository
+class CouponRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var \Doctrine\ORM\EntityRepository
+     */
+    private $repo;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
     {
-        parent::__construct($registry, Coupon::class);
+        $this->repo = $em->getRepository(Coupon::class);
+        $this->em = $em;
     }
 
-//    /**
-//     * @return Order[] Returns an array of Order objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('o.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function get($id): Coupon
+    {
+        /** @var Coupon $coupon */
+        if (!$coupon = $this->repo->find($id)) {
+            throw new EntityNotFoundException('Coupon is not found.');
+        }
+        return $coupon;
+    }
 
-//    public function findOneBySomeField($value): ?Order
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function add(Coupon $coupon): void
+    {
+        $this->em->persist($coupon);
+    }
+
+    public function remove(Coupon $coupon): void
+    {
+        $this->em->remove($coupon);
+    }
+
+    public function hasByCode($code): bool
+    {
+        return $this->repo->createQueryBuilder('t')
+                ->select('COUNT(t.id)')
+                ->andWhere('t.code = :code')
+                ->setParameter(':code', $code)
+                ->getQuery()->getSingleScalarResult() > 0;
+    }
+
+    public function hasByCodeAndId($code, $id): bool
+    {
+        return $this->repo->createQueryBuilder('t')
+                ->select('COUNT(t.id)')
+                ->andWhere('t.code = :code')
+                ->setParameter(':code', $code)
+                ->andWhere('t.id != :id')
+                ->setParameter(':id', $id)
+                ->getQuery()->getSingleScalarResult() > 0;
+    }
 }

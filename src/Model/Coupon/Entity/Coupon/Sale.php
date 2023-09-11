@@ -4,6 +4,7 @@ namespace App\Model\Coupon\Entity\Coupon;
 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Embeddable;
+use Webmozart\Assert\Assert;
 
 #[Embeddable]
 class Sale
@@ -16,6 +17,18 @@ class Sale
 
     #[Column(type: "integer")]
     private string $value;
+
+    public function __construct($type, $value)
+    {
+        Assert::greaterThan($value, 0);
+        Assert::oneOf($type, [
+            self::NUM,
+            self::PERCENT
+        ]);
+
+        $this->type = $type;
+        $this->value = $value;
+    }
 
     public function getType(): ?string
     {

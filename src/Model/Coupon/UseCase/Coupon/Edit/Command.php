@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Coupon\UseCase\Coupon\Update;
+namespace App\Model\Coupon\UseCase\Coupon\Edit;
 
 class Command
 {
@@ -22,18 +22,8 @@ class Command
         $this->sale = $obj;
     }
 
-    public function setName($name)
-    {
-        return $this->name = $name;
-    }
-
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getSale()
-    {
-        return $this->sale;
     }
 }

@@ -26,7 +26,7 @@ services:
     App\Model\User\Entity\User\UserRepository: ~
     App\Model\Order\Entity\Order\OrderRepository: ~
     App\Model\Coupon\Entity\Coupon\CouponRepository: ~
-    
+        
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     Symfony\Component\HttpFoundation\Session\Session:

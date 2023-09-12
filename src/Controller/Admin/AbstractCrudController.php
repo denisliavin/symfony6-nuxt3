@@ -35,6 +35,7 @@ class AbstractCrudController extends ParentAbstractCrudController
     public function new(AdminContext $context)
     {
         try {
+
             $event = new BeforeCrudActionEvent($context);
             $this->container->get('event_dispatcher')->dispatch($event);
             if ($event->isPropagationStopped()) {

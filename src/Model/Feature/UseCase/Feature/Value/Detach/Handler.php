@@ -20,9 +20,8 @@ class Handler
 
     public function handle(Command $command): void
     {
-        dd($command);
-        $feature = $this->features->get($command->feature_id);
 
+        $feature = $this->features->getByValueId($command->id);
         $feature->detachValue($command->id);
         $this->flusher->flush();
     }

@@ -25,7 +25,7 @@ class Feature
     private $description;
 
     /** @var Collection<int, FeatureValue> An ArrayCollection of Bug objects. */
-    #[ORM\OneToMany(targetEntity: FeatureValue::class, mappedBy: 'feature', cascade: ["persist"])]
+    #[ORM\OneToMany(targetEntity: FeatureValue::class, mappedBy: 'feature', cascade: ["persist"], orphanRemoval: true)]
     private Collection $values;
 
     public function __construct($name, $description)

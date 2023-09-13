@@ -23,7 +23,23 @@ class FeatureRepository
     {
         /** @var Feature $feature */
         if (!$feature = $this->repo->find($id)) {
-            throw new EntityNotFoundException('Coupon is not found.');
+            throw new EntityNotFoundException('Feature is not found.');
+        }
+        return $feature;
+    }
+
+    public function getByValueId($id): Feature
+    {
+        $feature = $this->repo->createQueryBuilder('t')
+                ->innerJoin('t.values', 'v')
+                ->andWhere('v.id = :id')
+                ->setParameter(':id', $id)
+                ->getQuery()
+                ->getSingleResult();
+
+        /** @var Feature $feature */
+        if (!$feature) {
+            throw new EntityNotFoundException('Feature is not found.');
         }
         return $feature;
     }

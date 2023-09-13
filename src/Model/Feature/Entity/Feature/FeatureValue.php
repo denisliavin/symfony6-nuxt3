@@ -60,4 +60,9 @@ class FeatureValue
     {
         return $this->feature;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

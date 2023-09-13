@@ -5,7 +5,7 @@ namespace App\Controller\Admin;
 use App\Model\Feature\UseCase as UseCase;
 use App\Model\Feature\Entity\Feature\Feature;
 use Doctrine\ORM\EntityManagerInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -70,7 +70,8 @@ class FeatureCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(),
             TextField::new('name'),
-            TextareaField::new('description')
+            TextareaField::new('description'),
+            AssociationField::new('values')->autocomplete()->setDisabled()->onlyWhenUpdating()
         ];
     }
 }

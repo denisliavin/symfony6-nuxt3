@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Builder\User;
+namespace App\Tests\Builder\Coupon;
 
 use App\Model\Coupon\Entity\Coupon\Coupon;
 use App\Model\Coupon\Entity\Coupon\Sale;

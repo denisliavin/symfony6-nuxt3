@@ -46,6 +46,11 @@ doctrine:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Model/Feature/Entity/Feature'
                 prefix: 'App\Model\Feature\Entity\Feature'
+                alias: Feature   
+            Product:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Model/Product/Entity'
+                prefix: 'App\Model\Product\Entity'
                 alias: Feature    
 
 when@test:

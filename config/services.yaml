@@ -23,6 +23,9 @@ services:
             - '../src/Model/Order/Entity/Order/'
             - '../src/Model/Image/Entity/Image/'
             - '../src/Model/Feature/Entity/Feature/'
+            - '../src/Model/Product/Entity/Category/'
+            - '../src/Model/Product/Entity/Brand/'
+            - '../src/Model/Product/Entity/Tag/'
             - '../src/Kernel.php'
     
     App\Model\User\Entity\User\UserRepository: ~

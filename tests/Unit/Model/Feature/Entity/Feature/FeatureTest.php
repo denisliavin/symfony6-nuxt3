@@ -36,12 +36,21 @@ class FeatureTest extends TestCase
     public function testAttachValue(): void
     {
         $feature = (new FeatureBuilder())->build();
-        $feature->edit(
-            $name = 'name',
-            $description = 'description'
+        $feature->attachValue(
+            $value1 = 'value1'
         );
 
-        self::assertEquals($name, $feature->getName());
-        self::assertEquals($description, $feature->getDescription());
+        self::assertEquals(1, $feature->getValues()->count());
+        self::assertEquals($value1, $feature->getValues()[0]->getName());
+    }
+
+    public function testDetachValue(): void
+    {
+        $feature = (new FeatureBuilder())->build();
+        $feature->attachValue(
+            $value1 = 'value1'
+        );
+
+        self::assertEquals(1, $feature->getValues()->count());
     }
 }

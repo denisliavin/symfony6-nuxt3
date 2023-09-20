@@ -9,6 +9,7 @@ use App\Model\Image\Entity\Image\Image;
 use App\Model\Product\Entity\Brand\Brand;
 use App\Model\Product\Entity\Category\Category;
 use App\Model\Product\Entity\Tag\Tag;
+use App\Model\Work\Entity\Projects\Project\Department\Department;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -63,20 +64,13 @@ class Product
     public function __construct(
         $slug,
         Category $category,
-        $brand,
-        $tag,
+        ?Brand $brand,
+        ?Tag $tag,
         Price $price,
         Info $info
     )
     {
         Assert::notEmpty($slug);
-
-        if ($brand && get_class($brand) != Brand::class) {
-            throw new \DomainException('Bad brand!');
-        }
-        if ($tag && get_class($tag) != Tag::class) {
-            throw new \DomainException('Bad tag!');
-        }
 
         $this->slug = $slug;
         $this->category = $category;
@@ -94,8 +88,8 @@ class Product
     public function edit(
         $slug,
         Category $category,
-        $brand,
-        $tag,
+        ?Brand $brand,
+        ?Tag $tag,
         Price $price,
         Info $info,
         $images,
@@ -104,13 +98,6 @@ class Product
     {
         Assert::notEmpty($slug);
 
-        if ($brand && get_class($brand) != Brand::class) {
-            throw new \DomainException('Bad brand!');
-        }
-        if ($tag && get_class($tag) != Tag::class) {
-            throw new \DomainException('Bad tag!');
-        }
-
         $this->slug = $slug;
         $this->category = $category;
         $this->brand = $brand;
@@ -118,8 +105,22 @@ class Product
         $this->price = $price;
         $this->info = $info;
 
-        $this->images = $images;
-        $this->featuresValues = $featuresValues;
+        //$this->images = $images;
+
+        $current = $this->featuresValues->toArray();
+        $new = $featuresValues;
+
+        $compare = static function (FeatureValue $a, FeatureValue $b): int {
+            return $a->getId() <=> $b->getId();
+        };
+
+        foreach (array_udiff($current, $new, $compare) as $item) {
+            $this->featuresValues->removeElement($item);
+        }
+
+        foreach (array_udiff($new, $current, $compare) as $item) {
+            $this->featuresValues->add($item);
+        }
     }
 
     public function getId(): ?int
@@ -170,5 +171,10 @@ class Product
     public function getImages(): ArrayCollection|Collection
     {
         return $this->images;
+    }
+
+    public function getImagesAdmin()
+    {
+        return [];
     }
 }

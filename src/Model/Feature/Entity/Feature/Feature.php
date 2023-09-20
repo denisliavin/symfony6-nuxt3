@@ -48,7 +48,7 @@ class Feature
     public function attachValue($name): void
     {
         foreach ($this->values as $value) {
-            if ($value->isFor($name, $this)) {
+            if ($value->getName() == $name) {
                 throw new \DomainException('Value is already attached.');
             }
         }

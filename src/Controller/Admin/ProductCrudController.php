@@ -2,11 +2,13 @@
 
 namespace App\Controller\Admin;
 
+use App\EasyAdmin\Fields\MultipleImageField;
 use App\Model\Product\UseCase as UseCase;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use App\Model\Product\Entity\Product\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -84,6 +86,9 @@ class ProductCrudController extends AbstractCrudController
             ];
         } else {
             return [
+                ImageField::new('images_admin')
+                    ->setFormTypeOption('multiple', true)
+                    ->setUploadDir('/'),
                 TextField::new('info.name'),
                 TextareaField::new('info.description')->setMaxLength(1000),
                 TextareaField::new('info.specification')->setMaxLength(1000),

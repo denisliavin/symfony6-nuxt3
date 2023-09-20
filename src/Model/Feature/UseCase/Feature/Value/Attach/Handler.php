@@ -23,7 +23,7 @@ class Handler
         $feature = $this->features->get($command->feature_id);
 
         if ($this->features->hasValueByName($command->name)) {
-            throw new \DomainException('Feature with this code already exists.');
+            throw new \DomainException('Feature Value with this name already exists.');
         }
 
         $feature->attachValue($command->name);

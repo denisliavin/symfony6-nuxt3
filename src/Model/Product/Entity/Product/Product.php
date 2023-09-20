@@ -42,6 +42,9 @@ class Product
     #[Embedded(class: Price::class)]
     private Price $price;
 
+    #[Embedded(class: Status::class)]
+    private Status $status;
+
     #[Embedded(class: Info::class)]
     private Info $info;
 
@@ -57,19 +60,66 @@ class Product
     #[ORM\ManyToMany(targetEntity: FeatureValue::class)]
     private Collection $featuresValues;
 
-    public function __construct()
+    public function __construct(
+        $slug,
+        Category $category,
+        $brand,
+        $tag,
+        Price $price,
+        Info $info
+    )
     {
+        Assert::notEmpty($slug);
+
+        if ($brand && get_class($brand) != Brand::class) {
+            throw new \DomainException('Bad brand!');
+        }
+        if ($tag && get_class($tag) != Tag::class) {
+            throw new \DomainException('Bad tag!');
+        }
+
+        $this->slug = $slug;
+        $this->category = $category;
+        $this->brand = $brand;
+        $this->tag = $tag;
+        $this->rating = 0.00;
+        $this->price = $price;
+        $this->info = $info;
+        $this->status = new Status(Status::TYPE_DISABLED);
+
         $this->images = new ArrayCollection();
         $this->featuresValues = new ArrayCollection();
     }
 
-    public function edit($slug, $name)
+    public function edit(
+        $slug,
+        Category $category,
+        $brand,
+        $tag,
+        Price $price,
+        Info $info,
+        $images,
+        $featuresValues
+    )
     {
         Assert::notEmpty($slug);
-        Assert::notEmpty($name);
+
+        if ($brand && get_class($brand) != Brand::class) {
+            throw new \DomainException('Bad brand!');
+        }
+        if ($tag && get_class($tag) != Tag::class) {
+            throw new \DomainException('Bad tag!');
+        }
 
         $this->slug = $slug;
-        $this->name = $name;
+        $this->category = $category;
+        $this->brand = $brand;
+        $this->tag = $tag;
+        $this->price = $price;
+        $this->info = $info;
+
+        $this->images = $images;
+        $this->featuresValues = $featuresValues;
     }
 
     public function getId(): ?int
@@ -77,13 +127,48 @@ class Product
         return $this->id;
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function getBrand(): ?Brand
+    {
+        return $this->brand;
+    }
+
+    public function getTag(): ?Tag
+    {
+        return $this->tag;
+    }
+
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    public function getPrice(): Price
+    {
+        return $this->price;
+    }
+
+    public function getInfo(): Info
+    {
+        return $this->info;
+    }
+
+    public function getFeaturesValues(): ArrayCollection|Collection
+    {
+        return $this->featuresValues;
+    }
+
+    public function getImages(): ArrayCollection|Collection
+    {
+        return $this->images;
     }
 }

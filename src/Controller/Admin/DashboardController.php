@@ -6,6 +6,10 @@ use App\Model\Coupon\Entity\Coupon\Coupon;
 use App\Model\Feature\Entity\Feature\Feature;
 use App\Model\Feature\Entity\Feature\FeatureValue;
 use App\Model\Order\Entity\Order\Order;
+use App\Model\Product\Entity\Brand\Brand;
+use App\Model\Product\Entity\Category\Category;
+use App\Model\Product\Entity\Product\Product;
+use App\Model\Product\Entity\Tag\Tag;
 use App\Model\User\Entity\User\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -52,5 +56,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Coupons', 'fas fa-list', Coupon::class);
         yield MenuItem::linkToCrud('Features', 'fas fa-list', Feature::class);
         yield MenuItem::linkToCrud('Features Values', 'fas fa-list', FeatureValue::class);
+        yield MenuItem::linkToCrud('Categories', 'fas fa-list', Category::class);
+        yield MenuItem::linkToCrud('Brands', 'fas fa-list', Brand::class);
+        yield MenuItem::linkToCrud('Tags', 'fas fa-list', Tag::class);
+        yield MenuItem::linkToCrud('Products', 'fas fa-list', Product::class);
     }
 }

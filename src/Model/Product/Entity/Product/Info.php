@@ -18,30 +18,40 @@ class Info
     #[Column(type: 'string', length: 1000)]
     private $specification;
 
-    public function __construct($type, $value)
+    public function __construct($name, $description, $specification)
     {
-        Assert::greaterThan($value, 0);
-        Assert::oneOf($type, [
-            self::NUM,
-            self::PERCENT
-        ]);
+        Assert::notEmpty($name);
+        Assert::notEmpty($description);
+        Assert::notEmpty($specification);
 
-        $this->type = $type;
-        $this->value = $value;
+        $this->name = $name;
+        $this->description = $description;
+        $this->specification = $specification;
     }
 
-    public function getType(): ?string
+    public function edit($name, $description, $specification)
     {
-        return $this->type;
+        Assert::notEmpty($name);
+        Assert::notEmpty($description);
+        Assert::notEmpty($specification);
+
+        $this->name = $name;
+        $this->description = $description;
+        $this->specification = $specification;
     }
 
-    public function getValue(): ?string
+    public function getName()
     {
-        return $this->value;
+        return $this->name;
     }
 
-    public function setValue($value)
+    public function getDescription()
     {
-        return $this->value = $value;
+        return $this->description;
+    }
+
+    public function getSpecification()
+    {
+        return $this->specification;
     }
 }

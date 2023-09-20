@@ -9,8 +9,8 @@ use Webmozart\Assert\Assert;
 #[Embeddable]
 class Sale
 {
-    const NUM = 'N';
-    const PERCENT = 'P';
+    const NUM = 'NUM';
+    const PERCENT = 'PERCENT';
 
     #[Column(type: "string", length: 50)]
     private string $type;

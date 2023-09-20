@@ -28,7 +28,7 @@ class Tag
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category', cascade: ["persist"], orphanRemoval: true)]
     private Collection $products;
 
-    public function __construct($slug, $name)
+    public function __construct($name, $slug)
     {
         Assert::notEmpty($slug);
         Assert::notEmpty($name);
@@ -37,7 +37,7 @@ class Tag
         $this->name = $name;
     }
 
-    public function edit($slug, $name)
+    public function edit($name, $slug)
     {
         Assert::notEmpty($slug);
         Assert::notEmpty($name);
@@ -64,5 +64,10 @@ class Tag
     public function getProducts(): Collection
     {
         return $this->products;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

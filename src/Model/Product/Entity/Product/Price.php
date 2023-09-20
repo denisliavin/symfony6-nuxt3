@@ -4,7 +4,6 @@ namespace App\Model\Product\Entity\Product;
 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Embeddable;
-use Webmozart\Assert\Assert;
 
 #[Embeddable]
 class Price
@@ -15,30 +14,41 @@ class Price
     #[Column(type: 'decimal', precision: 8, scale: 2)]
     private $old;
 
-    public function __construct($type, $value)
+    public function __construct($new, $old)
     {
-        Assert::greaterThan($value, 0);
-        Assert::oneOf($type, [
-            self::NUM,
-            self::PERCENT
-        ]);
+        if (
+            $new < 0 ||
+            $old < 0 ||
+            $new >= $old
+        ) {
+            throw new \DomainException('Bad price!');
+        }
 
-        $this->type = $type;
-        $this->value = $value;
+        $this->new = $new;
+        $this->old = $old;
     }
 
-    public function getType(): ?string
+    public function edit($new, $old)
     {
-        return $this->type;
+        if (
+            $new < 0 ||
+            $old < 0 ||
+            $new >= $old
+        ) {
+            throw new \DomainException('Bad price!');
+        }
+
+        $this->new = $new;
+        $this->old = $old;
     }
 
-    public function getValue(): ?string
+    public function getNew()
     {
-        return $this->value;
+        return $this->new;
     }
 
-    public function setValue($value)
+    public function getOld()
     {
-        return $this->value = $value;
+        return $this->old;
     }
 }

@@ -32,6 +32,10 @@ services:
     App\Model\Order\Entity\Order\OrderRepository: ~
     App\Model\Coupon\Entity\Coupon\CouponRepository: ~
     App\Model\Feature\Entity\Feature\FeatureRepository: ~
+    App\Model\Product\Entity\Category\CategoryRepository: ~
+    App\Model\Product\Entity\Brand\BrandRepository: ~
+    App\Model\Product\Entity\Tag\TagRepository: ~
+    App\Model\Product\Entity\Product\ProductRepository: ~
         
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

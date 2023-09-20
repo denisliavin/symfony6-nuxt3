@@ -28,22 +28,22 @@ class Brand
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category', cascade: ["persist"], orphanRemoval: true)]
     private Collection $products;
 
-    public function __construct($slug, $name)
+    public function __construct($name, $slug)
     {
-        Assert::notEmpty($slug);
         Assert::notEmpty($name);
+        Assert::notEmpty($slug);
 
-        $this->slug = $slug;
         $this->name = $name;
+        $this->slug = $slug;
     }
 
-    public function edit($slug, $name)
+    public function edit($name, $slug)
     {
-        Assert::notEmpty($slug);
         Assert::notEmpty($name);
+        Assert::notEmpty($slug);
 
-        $this->slug = $slug;
         $this->name = $name;
+        $this->slug = $slug;
     }
 
     public function getId(): ?int
@@ -64,5 +64,10 @@ class Brand
     public function getProducts(): Collection
     {
         return $this->products;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

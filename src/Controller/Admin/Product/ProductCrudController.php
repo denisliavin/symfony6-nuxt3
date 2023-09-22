@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\Product;
 
-use App\EasyAdmin\Fields\MultipleImageField;
+use App\Controller\Admin\AbstractCrudController;
 use App\Model\Product\UseCase as UseCase;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use App\Model\Product\Entity\Product\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 class ProductCrudController extends AbstractCrudController
 {
@@ -86,9 +88,6 @@ class ProductCrudController extends AbstractCrudController
             ];
         } else {
             return [
-                ImageField::new('images_admin')
-                    ->setFormTypeOption('multiple', true)
-                    ->setUploadDir('/'),
                 TextField::new('info.name'),
                 TextareaField::new('info.description')->setMaxLength(1000),
                 TextareaField::new('info.specification')->setMaxLength(1000),
@@ -101,6 +100,23 @@ class ProductCrudController extends AbstractCrudController
                 AssociationField::new('featuresValues')->autocomplete()->setRequired(false)
             ];
         }
+    }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        if (isset($_GET['entityId'])) {
+            $url = $this->container->get(AdminUrlGenerator::class)
+                ->setController(ImageCrudController::class)
+                ->setAction(Action::INDEX)
+                ->set('product_id', $_GET['entityId'])
+                ->generateUrl();
+
+            $viewInvoice = Action::new('Images', 'Images', 'fa fa-file-invoice')
+                ->linkToUrl($url);
+
+            $actions->add(Crud::PAGE_EDIT, $viewInvoice);
+        }
+
+        return $actions;
     }
 }

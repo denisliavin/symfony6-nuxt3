@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Model\Image\Entity\Image;
 
+use App\Model\Product\Entity\Product\Product;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Embedded;
+use Doctrine\ORM\Mapping\ManyToMany;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'images')]
@@ -16,26 +19,20 @@ class Image
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private \DateTimeImmutable $date;
-
     #[Embedded(class: Info::class)]
     private Info $info;
 
-    public function __construct(\DateTimeImmutable $date, Info $info)
+    #[ManyToMany(targetEntity: Product::class, mappedBy: 'images')]
+    private Collection $products;
+
+    public function __construct(Info $info)
     {
-        $this->date = $date;
         $this->info = $info;
     }
 
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getDate()
-    {
-        return $this->date;
     }
 
     public function getInfo(): Info

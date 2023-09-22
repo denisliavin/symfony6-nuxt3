@@ -25,7 +25,6 @@ class Handler
 
     public function handle(Command $command): void
     {
-        dd($command);
         $product = $this->products->get($command->id);
 
         if ($this->products->hasBySlugAndId($command->slug, $command->id)) {
@@ -39,7 +38,6 @@ class Handler
             $command->tag,
             new Price($command->price->new, $command->price->old),
             new Info($command->info->name, $command->info->description, $command->info->specification),
-            $command->images,
             $command->featuresValues
         );
 

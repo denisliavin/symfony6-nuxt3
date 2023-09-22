@@ -12,7 +12,6 @@ class Command
     public $price;
     public $info;
     public $images = [];
-    public $images_admin = [];
     public $featuresValues = [];
 
     public function __construct($id)

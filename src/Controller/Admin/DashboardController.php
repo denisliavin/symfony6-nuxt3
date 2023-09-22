@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Model\Coupon\Entity\Coupon\Coupon;
 use App\Model\Feature\Entity\Feature\Feature;
 use App\Model\Feature\Entity\Feature\FeatureValue;
+use App\Model\Image\Entity\Image\Image;
 use App\Model\Order\Entity\Order\Order;
 use App\Model\Product\Entity\Brand\Brand;
 use App\Model\Product\Entity\Category\Category;

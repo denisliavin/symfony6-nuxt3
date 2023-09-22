@@ -16,14 +16,10 @@ class Info
     #[Column(type: "string")]
     private $name;
 
-    #[Column(type: "integer")]
-    private $size;
-
-    public function __construct(string $path, string $name, int $size)
+    public function __construct(string $path, string $name)
     {
         $this->path = $path;
         $this->name = $name;
-        $this->size = $size;
     }
 
     public function getPath(): string
@@ -34,10 +30,5 @@ class Info
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getSize(): int
-    {
-        return $this->size;
     }
 }

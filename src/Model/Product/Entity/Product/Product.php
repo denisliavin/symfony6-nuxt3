@@ -9,7 +9,6 @@ use App\Model\Image\Entity\Image\Image;
 use App\Model\Product\Entity\Brand\Brand;
 use App\Model\Product\Entity\Category\Category;
 use App\Model\Product\Entity\Tag\Tag;
-use App\Model\Work\Entity\Projects\Project\Department\Department;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -50,9 +49,7 @@ class Product
     private Info $info;
 
     #[ORM\JoinTable(name: 'products_products_images')]
-    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'image_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: Image::class)]
+    #[ORM\ManyToMany(targetEntity: Image::class, inversedBy: 'products', cascade: ["persist"], orphanRemoval: true)]
     private Collection $images;
 
     #[ORM\JoinTable(name: 'products_products_features_values')]
@@ -92,7 +89,6 @@ class Product
         ?Tag $tag,
         Price $price,
         Info $info,
-        $images,
         $featuresValues
     )
     {
@@ -104,8 +100,6 @@ class Product
         $this->tag = $tag;
         $this->price = $price;
         $this->info = $info;
-
-        //$this->images = $images;
 
         $current = $this->featuresValues->toArray();
         $new = $featuresValues;
@@ -121,6 +115,11 @@ class Product
         foreach (array_udiff($new, $current, $compare) as $item) {
             $this->featuresValues->add($item);
         }
+    }
+
+    public function addImage(Image $image)
+    {
+        $this->images->add($image);
     }
 
     public function getId(): ?int
@@ -171,10 +170,5 @@ class Product
     public function getImages(): ArrayCollection|Collection
     {
         return $this->images;
-    }
-
-    public function getImagesAdmin()
-    {
-        return [];
     }
 }

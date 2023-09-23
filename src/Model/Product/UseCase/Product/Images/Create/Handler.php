@@ -23,11 +23,9 @@ class Handler
     public function handle(Command $command): void
     {
         $product = $this->products->get($command->product_id);
-        $image = new Image(new Info('products', $command->name));
+        $image = new Image(new Info('products', $command->info->name));
 
         $product->addImage($image);
-
-        //$this->products->add($product);
         $this->flusher->flush();
     }
 }

@@ -23,14 +23,17 @@ class ImageCrudController extends AbstractCrudController
 {
     public $entityManager;
     public $createHandler;
+    public $removeHandler;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        UseCase\Product\Images\Create\Handler $createHandler
+        UseCase\Product\Images\Create\Handler $createHandler,
+        UseCase\Product\Images\Remove\Handler $removeHandler
     )
     {
         $this->entityManager = $entityManager;
         $this->createHandler = $createHandler;
+        $this->removeHandler = $removeHandler;
     }
 
     public static function getEntityFqcn(): string
@@ -55,12 +58,9 @@ class ImageCrudController extends AbstractCrudController
         return new UseCase\Product\Images\Create\Command();
     }
 
-    public function configureFields(string $pageName): iterable
+    public function getRemoveCommand($id)
     {
-        yield ImageField::new('info.name')
-            ->setBasePath('public/uploads/products')
-            ->setUploadDir('/public/uploads/products')
-            ->setUploadedFileNamePattern('[ulid].[extension]');
+        return new UseCase\Product\Images\Remove\Command($id);
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $command): void
@@ -68,9 +68,22 @@ class ImageCrudController extends AbstractCrudController
         $this->createHandler->handle($command);
     }
 
+    public function deleteEntity(EntityManagerInterface $entityManager, $command): void
+    {
+        $this->removeHandler->handle($command);
+    }
+
+    public function configureFields(string $pageName): iterable
+    {
+        yield ImageField::new('info.name')
+            ->setBasePath('uploads/products')
+            ->setUploadDir('/public/uploads/products')
+            ->setUploadedFileNamePattern('[ulid].[extension]');
+    }
+
     public function configureActions(Actions $actions): Actions
     {
-        if (isset($_GET['entityId'])) {
+        if (isset($_GET['product_id'])) {
             $url = $this->container->get(AdminUrlGenerator::class)
                 ->setController(ImageCrudController::class)
                 ->setAction(Action::NEW)
@@ -80,6 +93,17 @@ class ImageCrudController extends AbstractCrudController
             $actions->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) use ($url) {
                 return $action->linkToUrl($url);
             });
+
+            $url = $this->container->get(AdminUrlGenerator::class)
+                ->setController(ProductCrudController::class)
+                ->setAction(Action::EDIT)
+                ->setEntityId($_GET['product_id'])
+                ->generateUrl();
+
+            $viewInvoice = Action::new('ToProduct', 'To product', 'fa fa-file-invoice')
+                ->linkToUrl($url)->createAsGlobalAction();
+
+            $actions->add(Crud::PAGE_INDEX, $viewInvoice);
         }
 
         return $actions->remove(Crud::PAGE_INDEX, Action::EDIT);

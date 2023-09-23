@@ -4,7 +4,7 @@ namespace App\Model\Product\UseCase\Product\Images\Create;
 
 class Command
 {
-    public $name;
+    public $info;
     public $product_id;
 
     public function __construct()
@@ -12,15 +12,18 @@ class Command
         if (isset($_GET['product_id'])) {
             $this->product_id = $_GET['product_id'];
         }
+
+        $this->info = new \stdClass();
+        $this->info->name = '';
     }
 
     public function getId()
     {
-        return $this->name;
+        return $this->info->name;
     }
 
-    public function getName()
+    public function getInfo()
     {
-        return $this->name;
+        return $this->info;
     }
 }

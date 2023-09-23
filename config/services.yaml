@@ -36,6 +36,10 @@ services:
     App\Model\Product\Entity\Brand\BrandRepository: ~
     App\Model\Product\Entity\Tag\TagRepository: ~
     App\Model\Product\Entity\Product\ProductRepository: ~
+    App\Model\Image\Entity\Image\ImageRepository: ~
+
+    App\Model\EventDispatcher:
+        class: App\Event\Dispatcher\MessengerEventDispatcher
         
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

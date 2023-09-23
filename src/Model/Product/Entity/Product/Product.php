@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Model\Product\Entity\Product;
 
+use App\Model\AggregateRoot;
+use App\Model\EventsTrait;
 use App\Model\Feature\Entity\Feature\FeatureValue;
 use App\Model\Image\Entity\Image\Image;
 use App\Model\Product\Entity\Brand\Brand;
@@ -17,8 +19,10 @@ use Webmozart\Assert\Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'products_products')]
-class Product
+class Product implements AggregateRoot
 {
+    use EventsTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -120,6 +124,18 @@ class Product
     public function addImage(Image $image)
     {
         $this->images->add($image);
+    }
+
+    public function removeImage(Image $imageOutside): void
+    {
+        foreach ($this->images as $image) {
+            if ($image->getId() == $imageOutside->getId()) {
+                //$this->images->removeElement($image);
+                $this->recordEvent(new Event\ProductImageRemoved($image->getInfo()));
+                return;
+            }
+        }
+        throw new \DomainException('Image is not found.');
     }
 
     public function getId(): ?int

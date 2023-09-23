@@ -130,7 +130,7 @@ class Product implements AggregateRoot
     {
         foreach ($this->images as $image) {
             if ($image->getId() == $imageOutside->getId()) {
-                //$this->images->removeElement($image);
+                $this->images->removeElement($image);
                 $this->recordEvent(new Event\ProductImageRemoved($image->getInfo()));
                 return;
             }

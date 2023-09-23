@@ -95,6 +95,16 @@ class ImageCrudController extends AbstractCrudController
             });
 
             $url = $this->container->get(AdminUrlGenerator::class)
+                ->setController(ImageCrudController::class)
+                ->setAction(Action::DELETE)
+                ->set('product_id', $_GET['product_id'])
+                ->generateUrl();
+
+            $actions->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) use ($url) {
+                return $action->linkToUrl($url);
+            });
+
+            $url = $this->container->get(AdminUrlGenerator::class)
                 ->setController(ProductCrudController::class)
                 ->setAction(Action::EDIT)
                 ->setEntityId($_GET['product_id'])

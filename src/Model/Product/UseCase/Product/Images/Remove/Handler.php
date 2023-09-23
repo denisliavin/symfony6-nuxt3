@@ -6,7 +6,6 @@ namespace App\Model\Product\UseCase\Product\Images\Remove;
 
 use App\Model\Flusher;
 use App\Model\Image\Entity\Image\ImageRepository;
-use App\Model\Product\Entity\Brand\BrandRepository;
 use App\Model\Product\Entity\Product\ProductRepository;
 
 class Handler
@@ -28,11 +27,14 @@ class Handler
 
     public function handle(Command $command): void
     {
-        $product = $this->products->get(1);
+        if (!isset($_GET['product_id'])) {
+            throw new \DomainException('Bad data');
+        }
+
+        $product = $this->products->get($_GET['product_id']);
         $image = $this->images->get($command->getId());
 
         $product->removeImage($image);
-
         $this->flusher->flush($product);
     }
 }

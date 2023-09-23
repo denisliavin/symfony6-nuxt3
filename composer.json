@@ -28,6 +28,7 @@
         "symfony/http-foundation": "6.3.*",
         "symfony/mailer": "6.3.*",
         "symfony/messenger": "6.3.*",
+        "symfony/monolog-bundle": "*",
         "symfony/runtime": "6.3.*",
         "symfony/webpack-encore-bundle": "^2.0",
         "symfony/yaml": "6.3.*",

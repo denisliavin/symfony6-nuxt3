@@ -1,7 +1,7 @@
 import http from '@/api/http';
 
 export async function login(username, password){
-	let data = await http.post('login_check', { username, password }, {
+	let data = await http.post('profile/login', { username, password }, {
 		errorAlert: 'при попытке логина'
 	});
 

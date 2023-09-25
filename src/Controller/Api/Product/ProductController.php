@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Product;
 
-use App\ReadModel\Product\ProductFetcher;
-use App\ReadModel\Product\Filter\Filter;
+use App\Controller\Api\PaginationSerializer;
+use App\ReadModel\Product\Product\ProductFetcher;
+use App\ReadModel\Product\Product\Filter\Filter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class ProductController extends AbstractController
 {
-    private const PER_PAGE = 20;
+    private const PER_PAGE = 6;
 
     public function __construct(private DenormalizerInterface $denormalizer)
     {
@@ -38,12 +39,18 @@ class ProductController extends AbstractController
 
         return $this->json([
             'items' => array_map(static function (array $item) use($app_url) {
+                $image_src = $app_url . '/images/default.png';
+                if ($item['info_path'] && $item['info_name']) {
+                    $image_src = $app_url . '/uploads/' . $item['info_path'] . '/' . $item['info_name'];
+                }
+
                 return [
                     'id' => $item['id'],
                     'name' => $item['name'],
                     'rating' => $item['rating'],
+                    'slug' => $item['slug'],
                     'price' => $item['price'],
-                    'image_src' => $app_url . '/uploads/' . $item['info_path'] . '/' . $item['info_name'],
+                    'image_src' => $image_src
                 ];
             }, (array)$pagination->getItems()),
             'pagination' => PaginationSerializer::toArray($pagination),

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\ReadModel\Product;
+namespace App\ReadModel\Product\Product;
 
 use App\Model\Product\Entity\Product\Product;
-use App\ReadModel\Product\Filter\Filter;
+use App\ReadModel\Product\Product\Filter\Filter;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -48,6 +48,7 @@ class ProductFetcher
                 'p.id',
                 'p.info_name AS name',
                 'p.rating',
+                'p.slug',
                 'p.price_new AS price',
                 'i.info_path',
                 'i.info_name'

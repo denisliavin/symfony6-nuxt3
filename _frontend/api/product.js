@@ -1,10 +1,11 @@
 import http from '@/api/http';
 
-export async function fetchList(){
+export async function fetchList(page, sort, direction){
 	let data = await http.get('products', {
 	  params: {
-      sort: 'id',
-      direction: 'desc',
+      page: page,
+      sort: sort,
+      direction: direction,
       filter: {
         price_from: 0,
         price_to: 100,

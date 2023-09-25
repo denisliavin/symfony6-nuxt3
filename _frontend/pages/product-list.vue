@@ -29,11 +29,16 @@
                                         <div class="col-md-4">
                                             <div class="product-short">
                                                 <div class="dropdown">
-                                                    <div class="dropdown-toggle" data-toggle="dropdown">Product short by</div>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown">
+                                                        <template v-if="productStore.sort.sort == 'id'">Newest</template>
+                                                        <template v-else-if="productStore.sort.sort == 'rating'">Popular</template>
+                                                        <template v-else-if="productStore.sort.sort == 'price_new'">Most sale</template>
+                                                        <template v-else>Product short by</template>
+                                                    </div>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a href="#" class="dropdown-item">Newest</a>
-                                                        <a href="#" class="dropdown-item">Popular</a>
-                                                        <a href="#" class="dropdown-item">Most sale</a>
+                                                        <a @click.prevent="changeSort('id', 'desc')" :class="productStore.sort.sort == 'id' ? 'disabled' : ''" href="#" class="dropdown-item">Newest</a>
+                                                        <a @click.prevent="changeSort('rating', 'desc')" :class="productStore.sort.sort == 'rating' ? 'disabled' : ''" href="#" class="dropdown-item">Popular</a>
+                                                        <a @click.prevent="changeSort('price_new', 'asc')" :class="productStore.sort.sort == 'price_new' ? 'disabled' : ''" href="#" class="dropdown-item">Most sale</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -61,25 +66,28 @@
                                 </div>
                             </div>
 
-                            <template v-for="product in store.products">
+                            <template v-for="product in productStore.products">
                                 <ProductItem :product="product"></ProductItem>
                             </template>
                         </div>
 
                         <!-- Pagination Start -->
                         <div class="col-md-12">
+
                             <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-center">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" tabindex="-1">Previous</a>
-                                    </li>
-                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Next</a>
-                                    </li>
-                                </ul>
+                                <vue-awesome-paginate
+                                    v-if="productStore.pagination.total && productStore.pagination.per_page"
+                                    :total-items="productStore.pagination.total"
+                                    :items-per-page="productStore.pagination.per_page"
+                                    :max-pages-shown="5"
+                                    v-model="productStore.pagination.page"
+                                    :on-click="onClickPagination"
+                                    pagination-container-class="pagination justify-content-center"
+                                    paginate-buttons-class="page-link"
+                                    active-page-class="active"
+                                    next-button-content="Next"
+                                    prev-button-content="Previous"
+                                />
                             </nav>
                         </div>
                         <!-- Pagination Start -->
@@ -91,20 +99,8 @@
                             <h2 class="title">Category</h2>
                             <nav class="navbar bg-light">
                                 <ul class="navbar-nav">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-female"></i>Fashion & Beauty</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-child"></i>Kids & Babies Clothes</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-tshirt"></i>Men & Women Clothes</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-mobile-alt"></i>Gadgets & Accessories</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><i class="fa fa-microchip"></i>Electronics & Accessories</a>
+                                    <li v-for="category in categoryStore.categories" class="nav-item">
+                                        <a class="nav-link" href="#"><i :class="category.icon"></i>{{ category.name }}</a>
                                     </li>
                                 </ul>
                             </nav>
@@ -196,29 +192,13 @@
                         <div class="sidebar-widget brands">
                             <h2 class="title">Our Brands</h2>
                             <ul>
-                                <li><a href="#">Nulla </a><span>(45)</span></li>
-                                <li><a href="#">Curabitur </a><span>(34)</span></li>
-                                <li><a href="#">Nunc </a><span>(67)</span></li>
-                                <li><a href="#">Ullamcorper</a><span>(74)</span></li>
-                                <li><a href="#">Fusce </a><span>(89)</span></li>
-                                <li><a href="#">Sagittis</a><span>(28)</span></li>
+                                <li v-for="brand in brandStore.brands"><a href="#">{{ brand.name }} </a><span>(45)</span></li>
                             </ul>
                         </div>
 
                         <div class="sidebar-widget tag">
                             <h2 class="title">Tags Cloud</h2>
-                            <a href="#">Lorem ipsum</a>
-                            <a href="#">Vivamus</a>
-                            <a href="#">Phasellus</a>
-                            <a href="#">pulvinar</a>
-                            <a href="#">Curabitur</a>
-                            <a href="#">Fusce</a>
-                            <a href="#">Sem quis</a>
-                            <a href="#">Mollis metus</a>
-                            <a href="#">Sit amet</a>
-                            <a href="#">Vel posuere</a>
-                            <a href="#">orci luctus</a>
-                            <a href="#">Nam lorem</a>
+                            <a v-for="tag in tagStore.tags" href="#">{{ tag.name }}</a>
                         </div>
                     </div>
                     <!-- Side Bar End -->
@@ -245,9 +225,51 @@
 <script setup>
 import { onMounted } from "vue";
 import { useProductStore } from '~/store/product';
-const store = useProductStore()
+import { useCategoryStore } from '~/store/category';
+import { useBrandStore } from '~/store/brand';
+import { useTagStore } from '~/store/tag';
+const productStore = useProductStore()
+const categoryStore = useCategoryStore()
+const brandStore = useBrandStore()
+const tagStore = useTagStore()
 
+const currentPage = ref(1)
 onMounted(() => {
-    store.setProducts()
+    productStore.setProducts()
+    categoryStore.setCategories()
+    brandStore.setBrands()
+    tagStore.setTags()
 })
+
+const onClickPagination = (page) => {
+    productStore.setProducts()
+};
+const changeSort = (sort, direction) => {
+    productStore.sort.sort = sort
+    productStore.sort.direction = direction
+    productStore.setProducts()
+};
 </script>
+
+<style>
+.componentContainer {
+    display: flex!important;
+}
+.product-view .pagination .page-link {
+    color: #353535;
+    border-color: #353535;
+}
+.product-view .pagination li:hover .page-link, .product-view .pagination li .active.page-link {
+    color: #FF6F61;
+    background: #000000;
+}
+.pagination li:first-child .page-link {
+    margin-left: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+.pagination li:last-child .page-link {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+</style>

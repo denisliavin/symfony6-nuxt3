@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ReadModel\Product\Filter;
+namespace App\ReadModel\Product\Product\Filter;
 
 class Filter
 {

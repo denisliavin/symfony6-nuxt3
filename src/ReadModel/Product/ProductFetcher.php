@@ -39,107 +39,32 @@ class ProductFetcher
      */
     public function all(Filter $filter, int $page, int $size, ?string $sort, ?string $direction): PaginationInterface
     {
-        dd($filter);
-        if (!\in_array($sort, [null, 't.id', 't.date', 'author_name', 'project_name', 'name', 't.type', 't.plan_date', 't.progress', 't.priority', 't.status'], true)) {
-            throw new \UnexpectedValueException('Cannot sort by ' . $sort);
-        }
+//        if (!\in_array($sort, [null, 'p.id', 'p.rating', 'p.price_new'], true)) {
+//            throw new \UnexpectedValueException('Cannot sort by ' . $sort);
+//        }
 
         $qb = $this->connection->createQueryBuilder()
             ->select(
-                't.id',
-                't.date',
-                't.author_id',
-                'TRIM(CONCAT(m.name_first, \' \', m.name_last)) AS author_name',
-                't.project_id',
-                'p.name project_name',
-                't.name',
-                't.parent_id AS parent',
-                't.type',
-                't.priority',
-                't.progress',
-                't.plan_date',
-                't.status'
+                'p.id',
+                'p.info_name AS name',
+                'p.rating',
+                'p.price_new AS price',
+                'i.info_path',
+                'i.info_name'
             )
-            ->from('work_projects_tasks', 't')
-            ->innerJoin('t', 'work_members_members', 'm', 't.author_id = m.id')
-            ->innerJoin('t', 'work_projects_projects', 'p', 't.project_id = p.id');
+            ->from('products_products', 'p')
+            ->leftJoin(
+            'p',
+            'images',
+            'i',
+            'i.id = ( SELECT image_id FROM products_products_images AS pi WHERE pi.product_id = p.id ORDER BY `image_id` DESC LIMIT 1)');
 
-        if ($filter->member) {
-            $qb->innerJoin('t', 'work_projects_project_memberships', 'ms', 't.project_id = ms.project_id');
-            $qb->andWhere('ms.member_id = :member');
-            $qb->setParameter(':member', $filter->member);
-        }
 
-        if ($filter->project) {
-            $qb->andWhere('t.project_id = :project');
-            $qb->setParameter(':project', $filter->project);
-        }
+        //dd($qb->fetchAllAssociative());
 
-        if ($filter->author) {
-            $qb->andWhere('t.author_id = :author');
-            $qb->setParameter(':author', $filter->author);
-        }
-
-        if ($filter->text) {
-            $vector = "(setweight(to_tsvector(t.name),'A') || setweight(to_tsvector(coalesce(t.content,'')), 'B'))";
-            $query = 'plainto_tsquery(:text)';
-            $qb->andWhere($qb->expr()->orX(
-                $qb->expr()->like('LOWER(CONCAT(t.name, \' \', coalesce(t.content, \'\')))', ':text'),
-                "$vector @@ $query"
-            ));
-            $qb->setParameter(':text', '%' . mb_strtolower($filter->text) . '%');
-            if (empty($sort)) {
-                $sort = "ts_rank($vector, $query)";
-                $direction = 'desc';
-            }
-        }
-
-        if ($filter->type) {
-            $qb->andWhere('t.type = :type');
-            $qb->setParameter(':type', $filter->type);
-        }
-
-        if ($filter->priority) {
-            $qb->andWhere('t.priority = :priority');
-            $qb->setParameter(':priority', $filter->priority);
-        }
-
-        if ($filter->status) {
-            $qb->andWhere('t.status = :status');
-            $qb->setParameter(':status', $filter->status);
-        }
-
-        if ($filter->executor) {
-            $qb->innerJoin('t', 'work_projects_tasks_executors', 'e', 'e.task_id = t.id');
-            $qb->andWhere('e.member_id = :executor');
-            $qb->setParameter(':executor', $filter->executor);
-        }
-
-        if ($filter->roots) {
-            $qb->andWhere('t.parent_id IS NULL');
-        }
-
-        if (!$sort) {
-            $sort = 't.id';
-            $direction = $direction ?: 'desc';
-        } else {
-            $direction = $direction ?: 'asc';
-        }
-
-        $qb->orderBy($sort, $direction);
 
         $pagination = $this->paginator->paginate($qb, $page, $size);
 
-        $tasks = (array)$pagination->getItems();
-        $executors = $this->batchLoadExecutors(array_column($tasks, 'id'));
-
-        $pagination->setItems(array_map(static function (array $task) use ($executors) {
-            return array_merge($task, [
-                'executors' => array_filter($executors, static function (array $executor) use ($task) {
-                    return $executor['task_id'] === $task['id'];
-                }),
-            ]);
-        }, $tasks));
 
         return $pagination;
     }

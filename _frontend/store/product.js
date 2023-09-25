@@ -11,7 +11,8 @@ export const useProductStore = defineStore('product', {
       let { res, data } = await productApi.fetchList();
 
       if(res && data){
-        this.products = data;
+        this.products = data.items;
+        //this.pagination = data.pagination;
       }
     },
   }

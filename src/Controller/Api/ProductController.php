@@ -19,7 +19,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/api/products', name: 'api-products')]
-    public function index(Request $request, ProductFetcher $fetcher): Response
+    public function index(Request $request, ProductFetcher $fetcher, $app_url): Response
     {
         $filter = new Filter();
 
@@ -37,30 +37,13 @@ class ProductController extends AbstractController
         );
 
         return $this->json([
-            'items' => array_map(static function (array $item) {
+            'items' => array_map(static function (array $item) use($app_url) {
                 return [
                     'id' => $item['id'],
-                    'project' => [
-                        'id' => $item['project_id'],
-                        'name' => $item['project_name'],
-                    ],
-                    'author' => [
-                        'id' => $item['author_id'],
-                        'name' => $item['author_name'],
-                    ],
-                    'date' => $item['date'],
-                    'plan_date' => $item['plan_date'],
-                    'parent' => $item['parent'],
                     'name' => $item['name'],
-                    'type' => $item['type'],
-                    'progress' => $item['progress'],
-                    'priority' => $item['priority'],
-                    'status' => $item['status'],
-                    'executors'=> array_map(static function (array $member) {
-                        return [
-                            'name' => $member['name'],
-                        ];
-                    }, $item['executors']),
+                    'rating' => $item['rating'],
+                    'price' => $item['price'],
+                    'image_src' => $app_url . '/uploads/' . $item['info_path'] . '/' . $item['info_name'],
                 ];
             }, (array)$pagination->getItems()),
             'pagination' => PaginationSerializer::toArray($pagination),

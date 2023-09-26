@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/../demo-project-manager/.idea/demo-project-manager.iml" filepath="$PROJECT_DIR$/../demo-project-manager/.idea/demo-project-manager.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/uliua.iml" filepath="$PROJECT_DIR$/.idea/uliua.iml" />
       <module fileurl="file://$PROJECT_DIR$/../vue/.idea/vue.iml" filepath="$PROJECT_DIR$/../vue/.idea/vue.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../yii2-demo-shop-master/.idea/yii2-demo-shop-master.iml" filepath="$PROJECT_DIR$/../yii2-demo-shop-master/.idea/yii2-demo-shop-master.iml" />
     </modules>
   </component>
 </project>

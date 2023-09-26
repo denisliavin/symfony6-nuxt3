@@ -28,6 +28,8 @@ services:
             - '../src/Model/Product/Entity/Category/'
             - '../src/Model/Product/Entity/Brand/'
             - '../src/Model/Product/Entity/Tag/'
+            - '../src/Model/Cart/Entity/CartOwner/'
+            - '../src/Model/Cart/Entity/Cart/'
             - '../src/Kernel.php'
     
     App\Model\User\Entity\User\UserRepository: ~

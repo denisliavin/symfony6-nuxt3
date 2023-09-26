@@ -146,5 +146,6 @@
     <orderEntry type="module" module-name="bootstrap-shop-template" />
     <orderEntry type="module" module-name="demo-project-manager" />
     <orderEntry type="module" module-name="vue" />
+    <orderEntry type="module" module-name="yii2-demo-shop-master" />
   </component>
 </module>

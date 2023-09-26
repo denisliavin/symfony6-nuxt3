@@ -2,6 +2,9 @@
 
 namespace App\Model\Coupon\Entity\Coupon;
 
+use App\Model\Cart\Entity\Cart\Cart;
+use App\Model\Feature\Entity\Feature\FeatureValue;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Embedded;
@@ -27,7 +30,10 @@ class Coupon
     private string $code;
 
     #[Embedded(class: Sale::class)]
-    private Sale $sale;
+    private Sale $sale;/** @var Collection<int, FeatureValue> An ArrayCollection of Bug objects. */
+
+    #[ORM\OneToMany(targetEntity: Cart::class, mappedBy: 'coupon')]
+    private Collection $carts;
 
     public function __construct($name, $code, Sale $sale)
     {

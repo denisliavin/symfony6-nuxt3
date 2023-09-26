@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Model\Product\Entity\Product;
 
 use App\Model\AggregateRoot;
+use App\Model\Cart\Entity\Cart\Cart;
+use App\Model\Cart\Entity\CartItem\CartItem;
 use App\Model\EventsTrait;
 use App\Model\Feature\Entity\Feature\FeatureValue;
 use App\Model\Image\Entity\Image\Image;
@@ -61,6 +63,9 @@ class Product implements AggregateRoot
     #[ORM\InverseJoinColumn(name: 'feature_value_id', referencedColumnName: 'id')]
     #[ORM\ManyToMany(targetEntity: FeatureValue::class)]
     private Collection $featuresValues;
+
+    #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: 'product')]
+    private Collection $cartItems;
 
     public function __construct(
         $slug,

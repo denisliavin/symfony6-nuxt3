@@ -52,6 +52,11 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Model/Product/Entity'
                 prefix: 'App\Model\Product\Entity'
                 alias: Feature    
+            Cart:
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Model/Cart/Entity'
+                prefix: 'App\Model\Cart\Entity'
+                alias: Feature    
 
 when@test:
     doctrine:

@@ -30,26 +30,29 @@ class ProductFetcher
     }
 
     /**
-     * @param Filter $filter
+     * @param array $filter
      * @param int $page
      * @param int $size
      * @param string $sort
      * @param string $direction
      * @return PaginationInterface
      */
-    public function all(Filter $filter, int $page, int $size, ?string $sort, ?string $direction): PaginationInterface
+    public function all(
+        $filter,
+        int $page,
+        int $size,
+        ?string $sort,
+        ?string $direction,
+        ?string $category
+    ): PaginationInterface
     {
-//        if (!\in_array($sort, [null, 'p.id', 'p.rating', 'p.price_new'], true)) {
-//            throw new \UnexpectedValueException('Cannot sort by ' . $sort);
-//        }
-
         $qb = $this->connection->createQueryBuilder()
             ->select(
                 'p.id',
                 'p.info_name AS name',
                 'p.rating',
                 'p.slug',
-                'p.price_new AS price',
+                'p.price_new',
                 'i.info_path',
                 'i.info_name'
             )
@@ -60,7 +63,45 @@ class ProductFetcher
             'i',
             'i.id = ( SELECT image_id FROM products_products_images AS pi WHERE pi.product_id = p.id ORDER BY `image_id` DESC LIMIT 1)');
 
+        if ($category) {
+            $qb->innerJoin('p', 'products_categories', 'pc', 'p.category_id = pc.id');
+            $qb->andWhere('pc.slug = :slug');
+            $qb->setParameter('slug', $category);
+        }
 
+        if ($filter['brand']) {
+            $qb->innerJoin('p', 'products_brands', 'pb', 'p.brand_id = pb.id');
+            $qb->andWhere('pb.id = :slug_id');
+            $qb->setParameter('slug_id', $filter['brand']);
+        }
+
+        if ($filter['tag']) {
+            $qb->innerJoin('p', 'products_tags', 'pt', 'p.tag_id = pt.id');
+            $qb->andWhere('pt.id = :tag_id');
+            $qb->setParameter('tag_id', $filter['tag']);
+        }
+
+        if ($filter['q']) {
+            $qb->andWhere('(LOWER(p.info_name) LIKE :q OR LOWER(p.info_description) LIKE :q OR LOWER(p.info_specification) LIKE :q)');
+            $qb->setParameter('q', '%' . mb_strtolower($filter['q']) . '%');
+        }
+
+        if ($filter['price_from'] && is_numeric($filter['price_from'])) {
+            $qb->andWhere('p.price_new >= :price_new');
+            $qb->setParameter('price_new', $filter['price_from']);
+        }
+
+        if ($filter['price_to'] && is_numeric($filter['price_to'])) {
+            $qb->andWhere('p.price_new <= :price_to');
+            $qb->setParameter('price_to', $filter['price_to']);
+        }
+
+        if (in_array($sort, ['id', 'rating', 'price_new']) && in_array($direction, [null, 'asc', 'desc'])) {
+            $qb->orderBy('p.' . $sort, $direction);
+        }
+
+
+        //dd($qb->getSQL());
         //dd($qb->fetchAllAssociative());
 
 

@@ -3,6 +3,7 @@ import * as productApi from '~/api/product.js';
 
 export const useProductStore = defineStore('product', {
   state: () => ({
+    tag: null,
     products: [],
     pagination: {
       count: 0,
@@ -14,6 +15,9 @@ export const useProductStore = defineStore('product', {
     filter: {
       price_from: '',
       price_to: '',
+      category: null,
+      brand: null,
+      tag: null,
       q: ''
     },
     sort: {
@@ -27,7 +31,13 @@ export const useProductStore = defineStore('product', {
       let { res, data } = await productApi.fetchList(
         this.pagination.page,
         this.sort.sort,
-        this.sort.direction
+        this.sort.direction,
+        this.filter.price_from,
+        this.filter.price_to,
+        this.filter.q,
+        this.category,
+        this.filter.brand,
+        this.filter.tag
       );
 
       if(res && data){

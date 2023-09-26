@@ -22,7 +22,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="product-search">
-                                                <input type="email" value="Search">
+                                                <input @input="changeSearch($event.target.value)" type="email" placeholder="Search">
                                                 <button><i class="fa fa-search"></i></button>
                                             </div>
                                         </div>
@@ -46,18 +46,20 @@
                                         <div class="col-md-4">
                                             <div class="product-price-range">
                                                 <div class="dropdown">
-                                                    <div class="dropdown-toggle" data-toggle="dropdown">Product price range</div>
+                                                    <div class="dropdown-toggle" data-toggle="dropdown">
+                                                        <template v-if="productStore.filter.price_from && productStore.filter.price_to">
+                                                            <template v-for="item in pricesRange">
+                                                                <template v-if="productStore.filter.price_from == item.from && productStore.filter.price_to == item.to">${{ item.from }} to ${{ item.to }}</template>
+                                                            </template>
+                                                        </template>
+                                                        <template v-else>
+                                                            Product price range
+                                                        </template>
+                                                    </div>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a href="#" class="dropdown-item">$0 to $50</a>
-                                                        <a href="#" class="dropdown-item">$51 to $100</a>
-                                                        <a href="#" class="dropdown-item">$101 to $150</a>
-                                                        <a href="#" class="dropdown-item">$151 to $200</a>
-                                                        <a href="#" class="dropdown-item">$201 to $250</a>
-                                                        <a href="#" class="dropdown-item">$251 to $300</a>
-                                                        <a href="#" class="dropdown-item">$301 to $350</a>
-                                                        <a href="#" class="dropdown-item">$351 to $400</a>
-                                                        <a href="#" class="dropdown-item">$401 to $450</a>
-                                                        <a href="#" class="dropdown-item">$451 to $500</a>
+                                                        <template v-for="item in pricesRange">
+                                                            <a @click.prevent="changePriceRange(item.from, item.to)" href="#" :class="productStore.filter.price_from == item.from && productStore.filter.price_to == item.to ? 'disabled' : ''" class="dropdown-item">${{ item.from }} to ${{ item.to }}</a>
+                                                        </template>
                                                     </div>
                                                 </div>
                                             </div>
@@ -100,7 +102,9 @@
                             <nav class="navbar bg-light">
                                 <ul class="navbar-nav">
                                     <li v-for="category in categoryStore.categories" class="nav-item">
-                                        <a class="nav-link" href="#"><i :class="category.icon"></i>{{ category.name }}</a>
+                                        <NuxtLink :to="'/catalog/' + category.slug" :class="category.slug == productStore.category ? 'disabled' : ''" class="nav-link">
+                                            <i :class="category.icon"></i>{{ category.name }}
+                                        </NuxtLink>
                                     </li>
                                 </ul>
                             </nav>
@@ -192,13 +196,17 @@
                         <div class="sidebar-widget brands">
                             <h2 class="title">Our Brands</h2>
                             <ul>
-                                <li v-for="brand in brandStore.brands"><a href="#">{{ brand.name }} </a><span>(45)</span></li>
+                                <li v-for="brand in brandStore.brands">
+                                    <a @click.prevent="changeBrand(brand.id)" :class="brand.id == productStore.filter.brand ? 'disabled' : ''" href="#">{{ brand.name }} </a><span>({{ brand.products }})</span>
+                                </li>
                             </ul>
                         </div>
 
                         <div class="sidebar-widget tag">
                             <h2 class="title">Tags Cloud</h2>
-                            <a v-for="tag in tagStore.tags" href="#">{{ tag.name }}</a>
+                            <template v-for="tag in tagStore.tags">
+                                <a @click.prevent="changeTag(tag.id)" :class="tag.id == productStore.filter.tag ? 'disabled' : ''" href="#">{{ tag.name }}</a>
+                            </template>
                         </div>
                     </div>
                     <!-- Side Bar End -->
@@ -233,6 +241,19 @@ const categoryStore = useCategoryStore()
 const brandStore = useBrandStore()
 const tagStore = useTagStore()
 
+const pricesRange = [
+        {from: 0, to: 50},
+        {from: 51, to: 100},
+        {from: 101, to: 150},
+        {from: 151, to: 200},
+        {from: 201, to: 250},
+        {from: 251, to: 300},
+        {from: 301, to: 350},
+        {from: 351, to: 400},
+        {from: 401, to: 450},
+        {from: 451, to: 500}
+    ]
+
 const currentPage = ref(1)
 onMounted(() => {
     productStore.setProducts()
@@ -247,6 +268,23 @@ const onClickPagination = (page) => {
 const changeSort = (sort, direction) => {
     productStore.sort.sort = sort
     productStore.sort.direction = direction
+    productStore.setProducts()
+};
+const changePriceRange = (from, to) => {
+    productStore.filter.price_from = from
+    productStore.filter.price_to = to
+    productStore.setProducts()
+};
+const changeSearch = (value) => {
+    productStore.filter.q = value
+    productStore.setProducts()
+};
+const changeBrand = (value) => {
+    productStore.filter.brand = value
+    productStore.setProducts()
+};
+const changeTag = (value) => {
+    productStore.filter.tag = value
     productStore.setProducts()
 };
 </script>
@@ -271,5 +309,21 @@ const changeSort = (sort, direction) => {
 .pagination li:last-child .page-link {
     border-top-right-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
+}
+.nav-link.disabled {
+    opacity: 0.6;
+}
+.sidebar-widget.tag a.disabled {
+    opacity: 0.6;
+}
+.sidebar-widget.tag a.disabled:hover {
+    background: white;
+    color: #353535;
+    border: 1px solid #353535;
+    cursor: default;
+}
+.sidebar-widget.brands ul li a.disabled {
+    color: #FF6F61;
+    padding-left: 10px;
 }
 </style>

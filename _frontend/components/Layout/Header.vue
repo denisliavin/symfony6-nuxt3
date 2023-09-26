@@ -25,7 +25,7 @@
                   <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                       <div class="navbar-nav mr-auto">
                           <NuxtLink to="/" class="nav-item nav-link">Home</NuxtLink>
-                          <NuxtLink to="/product-list" class="nav-item nav-link">Products</NuxtLink>
+                          <NuxtLink to="/catalog" class="nav-item nav-link">Products</NuxtLink>
                           <NuxtLink to="/product-detail" class="nav-item nav-link active">Product Detail</NuxtLink>
                           <NuxtLink to="/cart" class="nav-item nav-link">Cart</NuxtLink>
                           <NuxtLink to="/checkout" class="nav-item nav-link">Checkout</NuxtLink>

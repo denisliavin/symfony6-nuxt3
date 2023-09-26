@@ -4,37 +4,25 @@ namespace App\Controller\Api\Product;
 
 use App\Controller\Api\PaginationSerializer;
 use App\ReadModel\Product\Product\ProductFetcher;
-use App\ReadModel\Product\Product\Filter\Filter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class ProductController extends AbstractController
 {
     private const PER_PAGE = 6;
 
-    public function __construct(private DenormalizerInterface $denormalizer)
-    {
-    }
-
     #[Route('/api/products', name: 'api-products')]
     public function index(Request $request, ProductFetcher $fetcher, $app_url): Response
     {
-        $filter = new Filter();
-
-        /** @var Filter $filter */
-        $filter = $this->denormalizer->denormalize($request->query->get('filter'), Filter::class, 'array', [
-            'object_to_populate' => $filter
-        ]);
-
         $pagination = $fetcher->all(
-            $filter,
+            json_decode($request->query->get('filter'), true),
             $request->query->getInt('page', 1),
             self::PER_PAGE,
             $request->query->get('sort'),
-            $request->query->get('direction')
+            $request->query->get('direction'),
+            $request->query->get('category')
         );
 
         return $this->json([
@@ -49,7 +37,7 @@ class ProductController extends AbstractController
                     'name' => $item['name'],
                     'rating' => $item['rating'],
                     'slug' => $item['slug'],
-                    'price' => $item['price'],
+                    'price' => $item['price_new'],
                     'image_src' => $image_src
                 ];
             }, (array)$pagination->getItems()),

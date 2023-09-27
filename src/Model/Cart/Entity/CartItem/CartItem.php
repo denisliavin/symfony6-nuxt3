@@ -5,21 +5,20 @@ declare(strict_types=1);
 namespace App\Model\Cart\Entity\CartItem;
 
 use App\Model\Cart\Entity\Cart\Cart;
-use App\Model\Cart\Entity\CartOwner\Id;
 use App\Model\Product\Entity\Product\Product;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Embedded;
+use Webmozart\Assert\Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'carts_carts_items')]
 class CartItem
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Embedded(class: Id::class)]
+    private Id $id;
 
     #[ORM\ManyToOne(targetEntity: Cart::class, inversedBy: 'items')]
+    #[ORM\JoinColumn(name: 'cart_id', referencedColumnName: 'id_value')]
     private Cart $cart;
 
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'cartItems')]
@@ -30,5 +29,40 @@ class CartItem
     private $quantity;
 
     #[Embedded(class: Features::class)]
-    private Features|null $features = null;
+    private Features $features;
+
+    public function __construct(Id $id, Cart $cart, Product $product, int $quantity, Features $features)
+    {
+        Assert::greaterThanEq($quantity, 1);
+        $this->id = $id;
+        $this->cart = $cart;
+        $this->product = $product;
+        $this->quantity = $quantity;
+        $this->features = $features;
+    }
+
+    public function getId(): string
+    {
+        return $this->id->getValue();
+    }
+
+    public function getCompositeId(): string
+    {
+        return $this->product->getId() . $this->features->getSimpleValue();
+    }
+
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    public function plus($quantity)
+    {
+        return new static($this->id, $this->cart, $this->product, $this->quantity + $quantity, $this->features);
+    }
+
+    public function changeQuantity($quantity)
+    {
+        return new static($this->id, $this->cart, $this->product, $quantity, $this->features);
+    }
 }

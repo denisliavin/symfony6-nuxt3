@@ -12,4 +12,14 @@ class Features
 {
     #[Column(type: "string", nullable: true)]
     private $value;
+
+    public function getSimpleValue(): string
+    {
+        return $this->value;
+    }
+
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
 }

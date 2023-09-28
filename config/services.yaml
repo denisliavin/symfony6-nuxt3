@@ -42,6 +42,7 @@ services:
     App\Model\Product\Entity\Product\ProductRepository: ~
     App\Model\Image\Entity\Image\ImageRepository: ~
     App\Model\Cart\Entity\Cart\CartRepository: ~
+    App\Model\Cart\Entity\CartOwner\CartOwnerRepository: ~
 
     App\Model\EventDispatcher:
         class: App\Event\Dispatcher\MessengerEventDispatcher

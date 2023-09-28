@@ -38,6 +38,11 @@ class Cart
         $this->items = new ArrayCollection();
     }
 
+    public function edit( Coupon|null $coupon): void
+    {
+        $this->coupon = $coupon;
+    }
+
     public function add(CartItem $item): void
     {
 
@@ -90,5 +95,10 @@ class Cart
     public function getId(): Id
     {
         return $this->id;
+    }
+
+    public function getCoupon(): ?Coupon
+    {
+        return $this->coupon;
     }
 }

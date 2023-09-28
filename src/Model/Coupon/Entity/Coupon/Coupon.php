@@ -74,4 +74,9 @@ class Coupon
     {
         return $this->sale;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

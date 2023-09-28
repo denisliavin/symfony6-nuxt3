@@ -44,8 +44,8 @@ doctrine:
                 alias: Image    
             Feature:
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Model/Feature/Entity/Feature'
-                prefix: 'App\Model\Feature\Entity\Feature'
+                dir: '%kernel.project_dir%/src/Model/Feature/Entity'
+                prefix: 'App\Model\Feature\Entity'
                 alias: Feature   
             Product:
                 is_bundle: false

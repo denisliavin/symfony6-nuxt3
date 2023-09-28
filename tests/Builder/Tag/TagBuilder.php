@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Builder\Tag;
 
 use App\Model\Product\Entity\Tag\Tag;
+use App\Model\Product\Entity\Tag\Id;
 
 class TagBuilder
 {
@@ -14,6 +15,7 @@ class TagBuilder
     public function build(): Tag
     {
         $tag = new Tag(
+            Id::next(),
             $this->name,
             $this->slug
         );

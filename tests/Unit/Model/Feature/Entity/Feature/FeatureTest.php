@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Model\Feature\Entity\Feature;
 
+use App\Model\Feature\Entity\Feature\Id;
 use App\Model\Feature\Entity\Feature\Feature;
 use App\Tests\Builder\Feature\FeatureBuilder;
 use PHPUnit\Framework\TestCase;
@@ -13,6 +14,7 @@ class FeatureTest extends TestCase
     public function testCreate(): void
     {
         $feature = new Feature(
+            Id::next(),
             $name = 'name',
             $description = 'description'
         );

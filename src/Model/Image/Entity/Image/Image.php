@@ -14,10 +14,8 @@ use Doctrine\ORM\Mapping\ManyToMany;
 #[ORM\Table(name: 'images')]
 class Image
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Embedded(class: Id::class)]
+    private Id $id;
 
     #[Embedded(class: Info::class)]
     private Info $info;
@@ -25,8 +23,9 @@ class Image
     #[ManyToMany(targetEntity: Product::class, mappedBy: 'images')]
     private Collection $products;
 
-    public function __construct(Info $info)
+    public function __construct(Id $id, Info $info)
     {
+        $this->id = $id;
         $this->info = $info;
     }
 

@@ -14,10 +14,8 @@ use Webmozart\Assert\Assert;
 #[ORM\Table(name: 'products_categories')]
 class Category
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Embedded(class: Id::class)]
+    private Id $id;
 
     #[ORM\Column(type: 'string')]
     private $slug;
@@ -32,12 +30,13 @@ class Category
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category', cascade: ["persist"], orphanRemoval: true)]
     private Collection $products;
 
-    public function __construct($slug, $icon, $name)
+    public function __construct(Id $id, $slug, $icon, $name)
     {
         Assert::notEmpty($slug);
         Assert::notEmpty($icon);
         Assert::notEmpty($name);
 
+        $this->id = $id;
         $this->name = $name;
         $this->slug = $slug;
         $this->icon = $icon;
@@ -54,7 +53,7 @@ class Category
         $this->icon = $icon;
     }
 
-    public function getId(): ?int
+    public function getId(): Id
     {
         return $this->id;
     }

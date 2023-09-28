@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Model\Cart\Entity\CartItem;
 
 use App\Model\Cart\Entity\Cart\Cart;
+use App\Model\Feature\Entity\FeatureValue\FeatureValue;
 use App\Model\Product\Entity\Product\Product;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\Embedded;
 use Webmozart\Assert\Assert;
 
 #[ORM\Entity]
@@ -22,23 +24,32 @@ class CartItem
     private Cart $cart;
 
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'cartItems')]
-    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id_value')]
     private Product $product;
 
     #[ORM\Column(type: "integer")]
     private $quantity;
 
-    #[Embedded(class: Features::class)]
-    private Features $features;
+    #[ORM\JoinTable(name: 'carts_carts_items_features_values')]
+    #[ORM\JoinColumn(name: 'cart_item_id', referencedColumnName: 'id_value')]
+    #[ORM\InverseJoinColumn(name: 'feature_value_id', referencedColumnName: 'id_value')]
+    #[ORM\ManyToMany(targetEntity: FeatureValue::class)]
+    private Collection $featuresValues;
 
-    public function __construct(Id $id, Cart $cart, Product $product, int $quantity, Features $features)
+    public function __construct(Id $id, Cart $cart, Product $product, int $quantity, $featuresValues)
     {
         Assert::greaterThanEq($quantity, 1);
         $this->id = $id;
         $this->cart = $cart;
         $this->product = $product;
         $this->quantity = $quantity;
-        $this->features = $features;
+        $this->featuresValues = new ArrayCollection();
+
+        if ($featuresValues) {
+            foreach ($featuresValues as $featureValue) {
+                $this->featuresValues->add($featureValue);
+            }
+        }
     }
 
     public function getId(): string
@@ -48,7 +59,12 @@ class CartItem
 
     public function getCompositeId(): string
     {
-        return $this->product->getId() . $this->features->getSimpleValue();
+        $ids = array_map(function ($item) {
+            return $item->getId();
+        }, $this->featuresValues->toArray());
+        sort($ids);
+
+        return $this->product->getId() . implode('', $ids);
     }
 
     public function getQuantity(): int
@@ -58,11 +74,11 @@ class CartItem
 
     public function plus($quantity)
     {
-        return new static($this->id, $this->cart, $this->product, $this->quantity + $quantity, $this->features);
+        return new static($this->id, $this->cart, $this->product, $this->quantity + $quantity, $this->featuresValues);
     }
 
     public function changeQuantity($quantity)
     {
-        return new static($this->id, $this->cart, $this->product, $quantity, $this->features);
+        return new static($this->id, $this->cart, $this->product, $quantity, $this->featuresValues);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Builder\Feature;
 
 use App\Model\Feature\Entity\Feature\Feature;
+use App\Model\Feature\Entity\Feature\Id;
 
 class FeatureBuilder
 {
@@ -14,6 +15,7 @@ class FeatureBuilder
     public function build(): Feature
     {
         $feature = new Feature(
+            Id::next(),
             $this->name,
             $this->description
         );

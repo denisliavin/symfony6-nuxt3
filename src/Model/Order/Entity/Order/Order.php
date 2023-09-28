@@ -9,10 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: '`order`')]
 class Order
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Embedded(class: Id::class)]
+    private Id $id;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $total = null;
@@ -20,7 +18,7 @@ class Order
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $note = null;
 
-    public function getId(): ?int
+    public function getId(): Id
     {
         return $this->id;
     }

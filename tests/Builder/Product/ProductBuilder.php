@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Builder\Product;
 
+use App\Model\Product\Entity\Product\Id;
 use App\Model\Product\Entity\Product\Info;
 use App\Model\Product\Entity\Product\Price;
 use App\Model\Product\Entity\Product\Product;
@@ -33,6 +34,7 @@ class ProductBuilder
     public function build(): Product
     {
         $product = new Product(
+            Id::next(),
             $this->slug,
             $this->category,
             $this->brand,

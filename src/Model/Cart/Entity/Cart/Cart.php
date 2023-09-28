@@ -24,7 +24,7 @@ class Cart
     private CartOwner $owner;
 
     #[ORM\ManyToOne(targetEntity: Coupon::class, inversedBy: 'carts')]
-    #[ORM\JoinColumn(name: 'coupon_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'coupon_id', referencedColumnName: 'id_value')]
     private Coupon|null $coupon = null;
 
     #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: 'cart')]

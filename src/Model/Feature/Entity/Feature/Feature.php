@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Model\Feature\Entity\Feature;
 
+use App\Model\Feature\Entity\FeatureValue\Id as FeatureValueId;
+use App\Model\Feature\Entity\FeatureValue\FeatureValue;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,10 +15,8 @@ use Webmozart\Assert\Assert;
 #[ORM\Table(name: 'features')]
 class Feature
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Embedded(class: Id::class)]
+    private Id $id;
 
     #[ORM\Column(type: 'string')]
     private $name;
@@ -28,10 +28,11 @@ class Feature
     #[ORM\OneToMany(targetEntity: FeatureValue::class, mappedBy: 'feature', cascade: ["persist"], orphanRemoval: true)]
     private Collection $values;
 
-    public function __construct($name, $description)
+    public function __construct(Id $id, $name, $description)
     {
         Assert::notEmpty($name);
 
+        $this->id = $id;
         $this->name = $name;
         $this->description = $description;
         $this->values = new ArrayCollection();
@@ -53,7 +54,7 @@ class Feature
             }
         }
 
-        $this->values->add(new FeatureValue($name, $this));
+        $this->values->add(new FeatureValue(FeatureValueId::next(), $name, $this));
     }
 
     public function editValue($value_id, $name): void
@@ -79,7 +80,7 @@ class Feature
         throw new \DomainException('Value is not detached.');
     }
 
-    public function getId(): ?int
+    public function getId(): Id
     {
         return $this->id;
     }

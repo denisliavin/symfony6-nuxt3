@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Feature\Entity\Feature;
+namespace App\Model\Feature\Entity\FeatureValue;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Model\Feature\Entity\Feature\Feature;
 use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
@@ -12,21 +12,21 @@ use Webmozart\Assert\Assert;
 #[ORM\Table(name: 'features_values')]
 class FeatureValue
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Embedded(class: Id::class)]
+    private Id $id;
 
     #[ORM\Column(type: 'string')]
     private $name;
 
     #[ORM\ManyToOne(targetEntity: Feature::class, inversedBy: 'values')]
+    #[ORM\JoinColumn(name: 'feature_id', referencedColumnName: 'id_value')]
     private Feature|null $feature = null;
 
-    public function __construct($name, $feature)
+    public function __construct(Id $id, $name, $feature)
     {
         Assert::notEmpty($name);
 
+        $this->id = $id;
         $this->name = $name;
         $this->feature = $feature;
     }
@@ -38,9 +38,9 @@ class FeatureValue
         $this->name = $name;
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
-        return $this->id;
+        return $this->id->getValue();
     }
 
     public function getFeatureId()

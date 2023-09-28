@@ -3,7 +3,6 @@
 namespace App\Model\Coupon\Entity\Coupon;
 
 use App\Model\Cart\Entity\Cart\Cart;
-use App\Model\Feature\Entity\Feature\FeatureValue;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
@@ -18,10 +17,8 @@ use Webmozart\Assert\Assert;
 #[ORM\Table(name: 'coupons')]
 class Coupon
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Embedded(class: Id::class)]
+    private Id $id;
 
     #[Column(type: "string")]
     private string $name;
@@ -30,16 +27,17 @@ class Coupon
     private string $code;
 
     #[Embedded(class: Sale::class)]
-    private Sale $sale;/** @var Collection<int, FeatureValue> An ArrayCollection of Bug objects. */
+    private Sale $sale;
 
     #[ORM\OneToMany(targetEntity: Cart::class, mappedBy: 'coupon')]
     private Collection $carts;
 
-    public function __construct($name, $code, Sale $sale)
+    public function __construct(Id $id, $name, $code, Sale $sale)
     {
         Assert::notEmpty($name);
         Assert::notEmpty($code);
 
+        $this->id = $id;
         $this->name = $name;
         $this->code = $code;
         $this->sale = $sale;
@@ -55,7 +53,7 @@ class Coupon
         $this->sale = $sale;
     }
 
-    public function getId(): ?string
+    public function getId(): Id
     {
         return $this->id;
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model\Product\UseCase\Product\Create;
 
 use App\Model\Flusher;
+use App\Model\Product\Entity\Product\Id;
 use App\Model\Product\Entity\Product\Info;
 use App\Model\Product\Entity\Product\Price;
 use App\Model\Product\Entity\Product\Product;
@@ -28,6 +29,7 @@ class Handler
         }
 
         $product = new Product(
+            Id::next(),
             $command->slug,
             $command->category,
             $command->brand,

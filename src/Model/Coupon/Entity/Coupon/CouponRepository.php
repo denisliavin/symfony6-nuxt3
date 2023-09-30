@@ -41,7 +41,7 @@ class CouponRepository
     public function hasByCode($code): bool
     {
         return $this->repo->createQueryBuilder('t')
-                ->select('COUNT(t.id)')
+                ->select('COUNT(t.id.value)')
                 ->andWhere('t.code = :code')
                 ->setParameter(':code', $code)
                 ->getQuery()->getSingleScalarResult() > 0;
@@ -50,10 +50,10 @@ class CouponRepository
     public function hasByCodeAndId($code, $id): bool
     {
         return $this->repo->createQueryBuilder('t')
-                ->select('COUNT(t.id)')
+                ->select('COUNT(t.id.value)')
                 ->andWhere('t.code = :code')
                 ->setParameter(':code', $code)
-                ->andWhere('t.id != :id')
+                ->andWhere('t.id.value != :id')
                 ->setParameter(':id', $id)
                 ->getQuery()->getSingleScalarResult() > 0;
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Model\Product\Entity\Category;
 
-use App\Model\Feature\Entity\Feature\FeatureValue;
 use App\Model\Product\Entity\Product\Product;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

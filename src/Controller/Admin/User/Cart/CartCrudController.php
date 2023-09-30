@@ -81,17 +81,19 @@ class CartCrudController extends AbstractCrudController
 
         $actions->add(Crud::PAGE_EDIT, $toUser);
 
-        $url = $this->container->get(AdminUrlGenerator::class)
-            ->setController(CartItemCrudController::class)
-            ->setAction(Action::INDEX)
-            ->set('cart_id', $_GET['entityId'])
-            ->set('user_id', $_GET['user_id'])
-            ->generateUrl();
+        if (isset($_GET['entityId']) && $_GET['entityId']) {
+            $url = $this->container->get(AdminUrlGenerator::class)
+                ->setController(CartItemCrudController::class)
+                ->setAction(Action::INDEX)
+                ->set('cart_id', $_GET['entityId'])
+                ->set('user_id', $_GET['user_id'])
+                ->generateUrl();
 
-        $toCartItems = Action::new('ToCartItems', 'To cart items', 'fa fa-file-invoice')
-            ->linkToUrl($url);
+            $toCartItems = Action::new('ToCartItems', 'To cart items', 'fa fa-file-invoice')
+                ->linkToUrl($url);
 
-        $actions->add(Crud::PAGE_EDIT, $toCartItems);
+            $actions->add(Crud::PAGE_EDIT, $toCartItems);
+        }
 
         $actions->remove(Crud::PAGE_EDIT, Action::SAVE_AND_RETURN);
 

@@ -38,9 +38,9 @@ class FeatureValue
         $this->name = $name;
     }
 
-    public function getId(): ?string
+    public function getId(): Id
     {
-        return $this->id->getValue();
+        return $this->id;
     }
 
     public function getFeatureId()

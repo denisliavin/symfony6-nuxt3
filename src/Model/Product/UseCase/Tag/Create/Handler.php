@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model\Product\UseCase\Tag\Create;
 
 use App\Model\Flusher;
+use App\Model\Product\Entity\Tag\Id;
 use App\Model\Product\Entity\Tag\Tag;
 use App\Model\Product\Entity\Tag\TagRepository;
 
@@ -26,6 +27,7 @@ class Handler
         }
 
         $tag = new Tag(
+            Id::next(),
             $command->name,
             $command->slug
         );

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Coupon\UseCase\Coupon\Create;
 
+use App\Model\Coupon\Entity\Coupon\Id;
 use App\Model\Coupon\Entity\Coupon\Coupon;
 use App\Model\Coupon\Entity\Coupon\CouponRepository;
 use App\Model\Coupon\Entity\Coupon\Sale;
@@ -27,6 +28,7 @@ class Handler
         }
 
         $coupon = new Coupon(
+            Id::next(),
             $command->name,
             $command->code,
             new Sale(

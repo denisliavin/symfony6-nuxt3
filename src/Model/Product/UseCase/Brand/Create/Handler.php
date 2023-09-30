@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model\Product\UseCase\Brand\Create;
 
 use App\Model\Flusher;
+use App\Model\Product\Entity\Brand\Id;
 use App\Model\Product\Entity\Brand\Brand;
 use App\Model\Product\Entity\Brand\BrandRepository;
 
@@ -26,6 +27,7 @@ class Handler
         }
 
         $brand = new Brand(
+            Id::next(),
             $command->name,
             $command->slug
         );

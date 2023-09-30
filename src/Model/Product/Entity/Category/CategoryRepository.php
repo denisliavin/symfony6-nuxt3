@@ -41,7 +41,7 @@ class CategoryRepository
     public function hasBySlug($slug): bool
     {
         return $this->repo->createQueryBuilder('t')
-                ->select('COUNT(t.id)')
+                ->select('COUNT(t.id.value)')
                 ->andWhere('t.slug = :slug')
                 ->setParameter(':slug', $slug)
                 ->getQuery()->getSingleScalarResult() > 0;
@@ -50,10 +50,10 @@ class CategoryRepository
     public function hasBySlugAndId($slug, $id): bool
     {
         return $this->repo->createQueryBuilder('t')
-                ->select('COUNT(t.id)')
+                ->select('COUNT(t.id.value)')
                 ->andWhere('t.slug = :slug')
                 ->setParameter(':slug', $slug)
-                ->andWhere('t.id != :id')
+                ->andWhere('t.id.value != :id')
                 ->setParameter(':id', $id)
                 ->getQuery()->getSingleScalarResult() > 0;
     }

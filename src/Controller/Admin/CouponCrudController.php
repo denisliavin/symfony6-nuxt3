@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Model\Coupon\Entity\Coupon\Sale;
 use App\Model\Coupon\UseCase as UseCase;
 use App\Model\Coupon\Entity\Coupon\Coupon;
 use Doctrine\ORM\EntityManagerInterface;
@@ -71,8 +72,8 @@ class CouponCrudController extends AbstractCrudController
             TextField::new('name'),
             TextField::new('code'),
             ChoiceField::new('sale.type', 'Type')->setChoices([
-                'Number' => 'N',
-                'Percent' => 'P'
+                'Number' => Sale::NUM,
+                'Percent' => Sale::PERCENT
             ]),
             TextField::new('sale.value', 'Value')
         ];

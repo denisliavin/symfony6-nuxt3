@@ -3,8 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Model\Feature\Entity\Feature\FeatureRepository;
+use App\Model\Feature\Entity\FeatureValue\FeatureValue;
 use App\Model\Feature\UseCase as UseCase;
-use App\Model\Feature\Entity\Feature\FeatureValue;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
@@ -13,14 +13,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class FeatureValueCrudController extends AbstractCrudController
 {
-    public $entityManager;
     public $attachValueHandler;
     public $editValueHandler;
     public $detachValueHandler;
     public $features;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         UseCase\Feature\Value\Attach\Handler $attachValueHandler,
         UseCase\Feature\Value\Edit\Handler $editValueHandler,
         UseCase\Feature\Value\Detach\Handler $detachValueHandler,
@@ -28,7 +26,6 @@ class FeatureValueCrudController extends AbstractCrudController
     )
     {
         $this->features = $features;
-        $this->entityManager = $entityManager;
         $this->attachValueHandler = $attachValueHandler;
         $this->editValueHandler = $editValueHandler;
         $this->detachValueHandler = $detachValueHandler;
@@ -74,13 +71,13 @@ class FeatureValueCrudController extends AbstractCrudController
         $features = $this->features->findAll();
 
         return [
-            IdField::new('id')->onlyOnIndex(),
+            IdField::new('id.value')->onlyOnIndex(),
             TextField::new('name'),
             HiddenField::new('feature_id')->onlyWhenUpdating(),
             ChoiceField::new('feature_id', 'Feature ')->setChoices(array_reduce(
                 $features,
                 function($carry, $item) {
-                    return [$item->getName() => $item->getId()];
+                    return [$item->getName() => $item->getId()->getValue()];
                 }
             ))->hideWhenUpdating()
         ];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Feature\UseCase\Feature\Create;
 
+use App\Model\Feature\Entity\Feature\Id;
 use App\Model\Feature\Entity\Feature\Feature;
 use App\Model\Feature\Entity\Feature\FeatureRepository;
 use App\Model\Flusher;
@@ -26,6 +27,7 @@ class Handler
         }
 
         $feature = new Feature(
+            Id::next(),
             $command->name,
             $command->description
         );

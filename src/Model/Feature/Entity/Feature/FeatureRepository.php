@@ -32,7 +32,7 @@ class FeatureRepository
     {
         $feature = $this->repo->createQueryBuilder('t')
                 ->innerJoin('t.values', 'v')
-                ->andWhere('v.id = :id')
+                ->andWhere('v.id.value = :id')
                 ->setParameter(':id', $id)
                 ->getQuery()
                 ->getSingleResult();
@@ -62,7 +62,7 @@ class FeatureRepository
     public function hasByName($name): bool
     {
         return $this->repo->createQueryBuilder('t')
-                ->select('COUNT(t.id)')
+                ->select('COUNT(t.id.value)')
                 ->andWhere('t.name = :name')
                 ->setParameter(':name', $name)
                 ->getQuery()->getSingleScalarResult() > 0;
@@ -71,10 +71,10 @@ class FeatureRepository
     public function hasByNameAndId($name, $id): bool
     {
         return $this->repo->createQueryBuilder('t')
-                ->select('COUNT(t.id)')
+                ->select('COUNT(t.id.value)')
                 ->andWhere('t.name = :name')
                 ->setParameter(':name', $name)
-                ->andWhere('t.id != :id')
+                ->andWhere('t.id.value != :id')
                 ->setParameter(':id', $id)
                 ->getQuery()->getSingleScalarResult() > 0;
     }
@@ -82,7 +82,7 @@ class FeatureRepository
     public function hasValueByName($name): bool
     {
         return $this->repo->createQueryBuilder('t')
-                ->select('COUNT(t.id)')
+                ->select('COUNT(t.id.value)')
                 ->innerJoin('t.values', 'v')
                 ->andWhere('v.name = :name')
                 ->setParameter(':name', $name)

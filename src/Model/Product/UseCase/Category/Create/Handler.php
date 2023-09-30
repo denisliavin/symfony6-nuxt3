@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model\Product\UseCase\Category\Create;
 
 use App\Model\Flusher;
+use App\Model\Product\Entity\Category\Id;
 use App\Model\Product\Entity\Category\Category;
 use App\Model\Product\Entity\Category\CategoryRepository;
 
@@ -26,6 +27,7 @@ class Handler
         }
 
         $category = new Category(
+            Id::next(),
             $command->slug,
             $command->icon,
             $command->name

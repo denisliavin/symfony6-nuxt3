@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use App\Model\Product\Entity\Product\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -71,7 +72,7 @@ class ProductCrudController extends AbstractCrudController
     {
         if (Crud::PAGE_INDEX === $pageName) {
             return [
-                NumberField::new('id'),
+                IdField::new('id'),
                 TextField::new('info.name')
             ];
         } elseif(Crud::PAGE_NEW === $pageName) {

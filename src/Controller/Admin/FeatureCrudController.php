@@ -71,7 +71,8 @@ class FeatureCrudController extends AbstractCrudController
             IdField::new('id')->onlyOnIndex(),
             TextField::new('name'),
             TextareaField::new('description'),
-            AssociationField::new('values')->autocomplete()->setDisabled()->onlyWhenUpdating()
+            AssociationField::new('values')
+                ->autocomplete()->setCrudController(FeatureValueCrudController::class)->setDisabled()->onlyWhenUpdating()
         ];
     }
 }

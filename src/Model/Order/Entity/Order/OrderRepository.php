@@ -28,7 +28,7 @@ class OrderRepository extends ServiceEntityRepository
 //        return $this->createQueryBuilder('o')
 //            ->andWhere('o.exampleField = :val')
 //            ->setParameter('val', $value)
-//            ->orderBy('o.id', 'ASC')
+//            ->orderBy('o.id.value', 'ASC')
 //            ->setMaxResults(10)
 //            ->getQuery()
 //            ->getResult()

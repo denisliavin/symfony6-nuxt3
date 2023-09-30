@@ -7,6 +7,7 @@ class Command
     public $id;
     public $name;
     public $description;
+    public $values;
 
     /**
      * @return mixed

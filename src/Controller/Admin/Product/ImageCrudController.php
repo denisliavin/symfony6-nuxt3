@@ -46,7 +46,7 @@ class ImageCrudController extends AbstractCrudController
         $query = $this->container->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
 
         if (isset($_GET['product_id'])) {
-            $query->innerJoin('entity.products', 'p')->andWhere('p.id = :id')
+            $query->innerJoin('entity.products', 'p')->andWhere('p.id.value = :id')
                 ->setParameter(':id', $_GET['product_id']);
         }
 

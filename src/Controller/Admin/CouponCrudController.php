@@ -12,19 +12,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class CouponCrudController extends AbstractCrudController
 {
-    public $entityManager;
     public $createHandler;
     public $editHandler;
     public $removeHandler;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         UseCase\Coupon\Create\Handler $createHandler,
         UseCase\Coupon\Edit\Handler $editHandler,
         UseCase\Coupon\Remove\Handler $removeHandler,
     )
     {
-        $this->entityManager = $entityManager;
         $this->createHandler = $createHandler;
         $this->editHandler = $editHandler;
         $this->removeHandler = $removeHandler;

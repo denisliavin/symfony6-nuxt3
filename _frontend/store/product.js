@@ -3,7 +3,6 @@ import * as productApi from '~/api/product.js';
 
 export const useProductStore = defineStore('product', {
   state: () => ({
-    tag: null,
     products: [],
     pagination: {
       count: 0,
@@ -15,7 +14,6 @@ export const useProductStore = defineStore('product', {
     filter: {
       price_from: '',
       price_to: '',
-      category: null,
       brand: null,
       tag: null,
       q: ''

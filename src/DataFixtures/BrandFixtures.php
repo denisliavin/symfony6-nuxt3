@@ -10,6 +10,8 @@ use Faker\Factory;
 
 class BrandFixtures extends Fixture
 {
+    public const BRAND_REFERENCE = 'brand_';
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
@@ -21,6 +23,8 @@ class BrandFixtures extends Fixture
                 $faker->slug(8, false)
             );
             $manager->persist($brand);
+
+            $this->addReference(self::BRAND_REFERENCE . $i, $brand);
         }
 
         $manager->flush();

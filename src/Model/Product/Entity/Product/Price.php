@@ -19,7 +19,7 @@ class Price
         if (
             $new < 0 ||
             $old < 0 ||
-            $new >= $old
+            $new > $old
         ) {
             throw new \DomainException('Bad price!');
         }

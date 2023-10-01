@@ -63,6 +63,6 @@ class FeatureValue
 
     public function __toString()
     {
-        return $this->name . ' (' . $this->getFeature()->getName() . ')';
+        return $this->name;
     }
 }

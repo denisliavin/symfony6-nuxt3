@@ -10,6 +10,8 @@ use Faker\Factory;
 
 class TagFixtures extends Fixture
 {
+    public const TAG_REFERENCE = 'tag_';
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
@@ -21,6 +23,8 @@ class TagFixtures extends Fixture
                 $faker->slug(8, false)
             );
             $manager->persist($tag);
+
+            $this->addReference(self::TAG_REFERENCE . $i, $tag);
         }
 
         $manager->flush();

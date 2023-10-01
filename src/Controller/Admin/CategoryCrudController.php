@@ -8,19 +8,16 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class CategoryCrudController extends AbstractCrudController
 {
-    public $entityManager;
     public $createHandler;
     public $editHandler;
     public $removeHandler;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         UseCase\Category\Create\Handler $createHandler,
         UseCase\Category\Edit\Handler $editHandler,
         UseCase\Category\Remove\Handler $removeHandler,
     )
     {
-        $this->entityManager = $entityManager;
         $this->createHandler = $createHandler;
         $this->editHandler = $editHandler;
         $this->removeHandler = $removeHandler;

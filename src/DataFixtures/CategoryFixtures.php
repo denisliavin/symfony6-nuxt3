@@ -10,6 +10,8 @@ use Faker\Factory;
 
 class CategoryFixtures extends Fixture
 {
+    public const CATEGORY_REFERENCE = 'category_';
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
@@ -22,6 +24,8 @@ class CategoryFixtures extends Fixture
                 $faker->text(50)
             );
             $manager->persist($category);
+
+            $this->addReference(self::CATEGORY_REFERENCE . $i, $category);
         }
 
         $manager->flush();

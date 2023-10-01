@@ -7,6 +7,7 @@ class Command
     public $cart_id;
     public $product;
     public $features;
+    public $featuresValues;
     public $quantity;
 
     public function __construct()

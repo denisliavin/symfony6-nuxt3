@@ -8,19 +8,16 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TagCrudController extends AbstractCrudController
 {
-    public $entityManager;
     public $createHandler;
     public $editHandler;
     public $removeHandler;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         UseCase\Tag\Create\Handler $createHandler,
         UseCase\Tag\Edit\Handler $editHandler,
         UseCase\Tag\Remove\Handler $removeHandler,
     )
     {
-        $this->entityManager = $entityManager;
         $this->createHandler = $createHandler;
         $this->editHandler = $editHandler;
         $this->removeHandler = $removeHandler;

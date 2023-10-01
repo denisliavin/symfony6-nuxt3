@@ -1,30 +1,31 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\Feature;
 
-use App\Model\Feature\UseCase as UseCase;
 use App\Model\Feature\Entity\Feature\Feature;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Model\Feature\UseCase as UseCase;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
-class FeatureCrudController extends AbstractCrudController
+class FeatureCrudController extends \App\Controller\Admin\AbstractCrudController
 {
-    public $entityManager;
     public $createHandler;
     public $editHandler;
     public $removeHandler;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         UseCase\Feature\Create\Handler $createHandler,
         UseCase\Feature\Edit\Handler $editHandler,
         UseCase\Feature\Remove\Handler $removeHandler,
     )
     {
-        $this->entityManager = $entityManager;
         $this->createHandler = $createHandler;
         $this->editHandler = $editHandler;
         $this->removeHandler = $removeHandler;
@@ -74,5 +75,23 @@ class FeatureCrudController extends AbstractCrudController
             AssociationField::new('values')
                 ->autocomplete()->setCrudController(FeatureValueCrudController::class)->setDisabled()->onlyWhenUpdating()
         ];
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        if (isset($_GET['entityId'])) {
+            $url = $this->container->get(AdminUrlGenerator::class)
+                ->setController(FeatureValueCrudController::class)
+                ->setAction(Action::INDEX)
+                ->set('feature_id', $_GET['entityId'])
+                ->generateUrl();
+
+            $toValues = Action::new('ToValues', 'To values', 'fa fa-file-invoice')
+                ->linkToUrl($url);
+
+            $actions->add(Crud::PAGE_EDIT, $toValues);
+        }
+
+        return $actions;
     }
 }

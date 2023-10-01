@@ -14,6 +14,13 @@ class CategoryController extends AbstractController
     {
         $categories = $fetcher->all();
 
-        return $this->json($categories);
+        return $this->json(array_map(static function (array $item) {
+            return [
+                'id' => $item['id_value'],
+                'name' => $item['name'],
+                'slug' => $item['slug'],
+                'icon' => $item['icon']
+            ];
+        }, (array)$categories));
     }
 }

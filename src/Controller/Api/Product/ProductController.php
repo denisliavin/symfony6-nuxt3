@@ -33,7 +33,7 @@ class ProductController extends AbstractController
                 }
 
                 return [
-                    'id' => $item['id'],
+                    'id' => $item['id_value'],
                     'name' => $item['name'],
                     'rating' => $item['rating'],
                     'slug' => $item['slug'],

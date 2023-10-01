@@ -11,6 +11,8 @@ use Faker\Factory;
 
 class FeatureFixtures extends Fixture
 {
+    public const FEATURE_REFERENCE = 'feature_';
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
@@ -27,6 +29,8 @@ class FeatureFixtures extends Fixture
             }
 
             $manager->persist($feature);
+
+            $this->addReference(self::FEATURE_REFERENCE . $i, $feature);
         }
 
         $manager->flush();

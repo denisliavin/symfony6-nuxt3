@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -120,15 +121,16 @@ class CartItemCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         if (Crud::PAGE_INDEX === $pageName) {
-            return [];
+            return [
+                IdField::new('id'),
+                AssociationField::new('product'),
+                NumberField::new('quantity')
+            ];
         } elseif(Crud::PAGE_NEW === $pageName) {
             return [
                 NumberField::new('quantity'),
                 AssociationField::new('product')->autocomplete(),
-                ChoiceField::new('features')
-                    ->allowMultipleChoices()
-                    ->autocomplete()
-                    ->setChoices(['Label visible to users' => 'submitted_value'])
+                AssociationField::new('featuresValues')->autocomplete()
             ];
         } else {
             return [

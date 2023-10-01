@@ -6,41 +6,47 @@ namespace App\Model\Cart\UseCase\Cart\Items\Add;
 
 use App\Model\Cart\Entity;
 use App\Model\Cart\Entity\Cart\CartRepository;
-use App\Model\Cart\Entity\Cart\Cart;
-use App\Model\Cart\Entity\CartOwner\CartOwner;
-use App\Model\Cart\Entity\CartOwner\CartOwnerRepository;
+use App\Model\Cart\Entity\CartItem\CartItem;
 use App\Model\Flusher;
 
 class Handler
 {
     private $carts;
-    private $cartsOwners;
     private $flusher;
 
-    public function __construct(CartOwnerRepository $cartsOwners, CartRepository $carts, Flusher $flusher)
+    public function __construct(CartRepository $carts, Flusher $flusher)
     {
-        $this->cartsOwners = $cartsOwners;
         $this->carts = $carts;
         $this->flusher = $flusher;
     }
 
     public function handle(Command $command): void
     {
-        $owner = new CartOwner(
-            Entity\CartOwner\Id::next(),
-            null,
-            $command->user_id
+        $cart = $this->carts->get($command->cart_id);
+        $num = 0;
+
+        foreach ($command->product->getFeaturesValues() as $productFeatureValue) {
+            foreach ($command->featuresValues as $featureValue) {
+                if ($featureValue->getId()->getValue() == $productFeatureValue->getId()->getValue()) {
+                    $num++;
+                }
+            }
+        }
+
+        if ($num != count($command->featuresValues)) {
+            throw new \DomainException('Feature Value no related for product');
+        }
+
+        $cartItem = new CartItem(
+            Entity\CartItem\Id::next(),
+            $cart,
+            $command->product,
+            1,
+            $command->featuresValues
         );
 
-        $cart = new Cart(
-            $command->cart_id,
-            $owner,
-            null
-        );
+        $cart->add($cartItem);
 
-
-        $this->cartsOwners->add($owner);
-        $this->carts->add($cart);
         $this->flusher->flush();
     }
 }

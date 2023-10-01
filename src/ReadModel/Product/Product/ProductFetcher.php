@@ -48,7 +48,7 @@ class ProductFetcher
     {
         $qb = $this->connection->createQueryBuilder()
             ->select(
-                'p.id',
+                'p.id_value',
                 'p.info_name AS name',
                 'p.rating',
                 'p.slug',
@@ -61,27 +61,27 @@ class ProductFetcher
             'p',
             'images',
             'i',
-            'i.id = ( SELECT image_id FROM products_products_images AS pi WHERE pi.product_id = p.id ORDER BY `image_id` DESC LIMIT 1)');
+            'i.id_value = ( SELECT image_id FROM products_products_images AS pi WHERE pi.product_id = p.id_value ORDER BY `image_id` DESC LIMIT 1)');
 
         if ($category) {
-            $qb->innerJoin('p', 'products_categories', 'pc', 'p.category_id = pc.id');
+            $qb->innerJoin('p', 'products_categories', 'pc', 'p.category_id = pc.id_value');
             $qb->andWhere('pc.slug = :slug');
             $qb->setParameter('slug', $category);
         }
 
-        if ($filter['brand']) {
-            $qb->innerJoin('p', 'products_brands', 'pb', 'p.brand_id = pb.id');
-            $qb->andWhere('pb.id = :slug_id');
+        if (isset($filter['brand']) && $filter['brand']) {
+            $qb->innerJoin('p', 'products_brands', 'pb', 'p.brand_id = pb.id_value');
+            $qb->andWhere('pb.id_value = :slug_id');
             $qb->setParameter('slug_id', $filter['brand']);
         }
 
-        if ($filter['tag']) {
-            $qb->innerJoin('p', 'products_tags', 'pt', 'p.tag_id = pt.id');
-            $qb->andWhere('pt.id = :tag_id');
+        if (isset($filter['tag']) && $filter['tag']) {
+            $qb->innerJoin('p', 'products_tags', 'pt', 'p.tag_id = pt.id_value');
+            $qb->andWhere('pt.id_value = :tag_id');
             $qb->setParameter('tag_id', $filter['tag']);
         }
 
-        if ($filter['q']) {
+        if (isset($filter['q']) && $filter['q']) {
             $qb->andWhere('(LOWER(p.info_name) LIKE :q OR LOWER(p.info_description) LIKE :q OR LOWER(p.info_specification) LIKE :q)');
             $qb->setParameter('q', '%' . mb_strtolower($filter['q']) . '%');
         }

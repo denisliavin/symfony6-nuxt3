@@ -12,8 +12,14 @@ class TagController extends AbstractController
     #[Route('/api/tags', name: 'api-tags')]
     public function index(TagFetcher $fetcher): Response
     {
-        $categories = $fetcher->all();
+        $tags = $fetcher->all();
 
-        return $this->json($categories);
+        return $this->json(array_map(static function (array $item) {
+            return [
+                'id' => $item['id_value'],
+                'name' => $item['name'],
+                'slug' => $item['slug'],
+            ];
+        }, (array)$tags));
     }
 }

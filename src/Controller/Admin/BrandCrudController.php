@@ -8,19 +8,16 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class BrandCrudController extends AbstractCrudController
 {
-    public $entityManager;
     public $createHandler;
     public $editHandler;
     public $removeHandler;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         UseCase\Brand\Create\Handler $createHandler,
         UseCase\Brand\Edit\Handler $editHandler,
         UseCase\Brand\Remove\Handler $removeHandler,
     )
     {
-        $this->entityManager = $entityManager;
         $this->createHandler = $createHandler;
         $this->editHandler = $editHandler;
         $this->removeHandler = $removeHandler;

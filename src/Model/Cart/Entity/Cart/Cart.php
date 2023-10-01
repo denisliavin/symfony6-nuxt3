@@ -27,7 +27,7 @@ class Cart
     #[ORM\JoinColumn(name: 'coupon_id', referencedColumnName: 'id_value')]
     private Coupon|null $coupon = null;
 
-    #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: 'cart')]
+    #[ORM\OneToMany(targetEntity: CartItem::class, mappedBy: 'cart', cascade: ["persist"], orphanRemoval: true)]
     private Collection $items;
 
     public function __construct(Id $id, CartOwner $owner, Coupon|null $coupon)

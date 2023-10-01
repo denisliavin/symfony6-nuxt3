@@ -130,6 +130,11 @@ class Product implements AggregateRoot
         }
     }
 
+    public function addFeatureValue(FeatureValue $featureValue)
+    {
+        $this->featuresValues->add($featureValue);
+    }
+
     public function addImage(Image $image)
     {
         $this->images->add($image);

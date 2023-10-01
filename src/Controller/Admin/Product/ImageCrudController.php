@@ -21,17 +21,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 class ImageCrudController extends AbstractCrudController
 {
-    public $entityManager;
     public $createHandler;
     public $removeHandler;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         UseCase\Product\Images\Create\Handler $createHandler,
         UseCase\Product\Images\Remove\Handler $removeHandler
     )
     {
-        $this->entityManager = $entityManager;
         $this->createHandler = $createHandler;
         $this->removeHandler = $removeHandler;
     }

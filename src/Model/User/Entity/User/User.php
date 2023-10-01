@@ -32,11 +32,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    public function __construct(Id $id, $email, $roles, $username, $password)
-    {
-
-    }
-
     public function getId(): Id
     {
         return $this->id;
@@ -52,6 +47,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    public function setId(Id $id)
+    {
+        $this->id = $id;
     }
 
     /**

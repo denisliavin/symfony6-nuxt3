@@ -18,17 +18,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 class ProductCrudController extends AbstractCrudController
 {
-    public $entityManager;
     public $createHandler;
     public $editHandler;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
         UseCase\Product\Create\Handler $createHandler,
         UseCase\Product\Edit\Handler $editHandler
     )
     {
-        $this->entityManager = $entityManager;
         $this->createHandler = $createHandler;
         $this->editHandler = $editHandler;
     }

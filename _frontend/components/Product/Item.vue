@@ -12,7 +12,7 @@
                     <img :src="props.product.image_src" alt="Product Image">
                 </a>
                 <div class="product-action">
-                    <a href="#"><i class="fa fa-cart-plus"></i></a>
+                    <a @click.prevent="addToCart" href="#"><i class="fa fa-cart-plus"></i></a>
                     <a href="#"><i class="fa fa-heart"></i></a>
                     <a href="#"><i class="fa fa-search"></i></a>
                 </div>
@@ -26,6 +26,9 @@
 </template>
 <script setup>
 import { computed } from "vue";
+import { useCartStore } from '~/store/cart';
+const cartStore = useCartStore()
+
 const props = defineProps(['product'])
 
 const rating = computed(() => {
@@ -36,5 +39,9 @@ const rating = computed(() => {
     }
     return arr;
 })
+
+const addToCart = () => {
+    cartStore.add(props.product.id, [])
+};
 
 </script>

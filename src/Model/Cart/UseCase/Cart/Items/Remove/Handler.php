@@ -4,25 +4,26 @@ declare(strict_types=1);
 
 namespace App\Model\Cart\UseCase\Cart\Items\Remove;
 
-use App\Model\Coupon\Entity\Coupon\CouponRepository;
+use App\Model\Cart\Entity\CartItem\Id;
+use App\Model\Cart\Entity\Cart\CartRepository;
 use App\Model\Flusher;
 
 class Handler
 {
-    private $coupons;
+    private $carts;
     private $flusher;
 
-    public function __construct(CouponRepository $coupons, Flusher $flusher)
+    public function __construct(CartRepository $carts, Flusher $flusher)
     {
-        $this->coupons = $coupons;
+        $this->carts = $carts;
         $this->flusher = $flusher;
     }
 
     public function handle(Command $command): void
     {
-        $coupon = $this->coupons->get($command->id);
+        $cart = $this->carts->get($command->cart_id);
 
-        $this->coupons->remove($coupon);
+        $cart->remove(new Id($command->id));
 
         $this->flusher->flush();
     }

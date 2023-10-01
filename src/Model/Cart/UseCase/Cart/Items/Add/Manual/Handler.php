@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Cart\UseCase\Cart\Items\Add;
+namespace App\Model\Cart\UseCase\Cart\Items\Add\Manual;
 
 use App\Model\Cart\Entity;
 use App\Model\Cart\Entity\Cart\CartRepository;

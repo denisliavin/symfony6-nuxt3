@@ -5,19 +5,19 @@ namespace App\Model\Cart\UseCase\Cart\Items\Set;
 class Command
 {
     public $id;
-    public $coupon;
+    public $quantity;
+    public $cart;
 
     /**
      * @return mixed
      */
     public function __construct($id)
     {
-        $this->id = new \stdClass();
-        $this->id->value = $id;
+        $this->id = $id;
     }
 
     public function getId()
     {
-        return $this->id->value;
+        return $this->id;
     }
 }

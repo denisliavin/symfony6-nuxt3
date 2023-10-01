@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Model\Cart\UseCase\Cart\Items\Add;
+namespace App\Model\Cart\UseCase\Cart\Items\Add\Manual;
 
 class Command
 {
     public $cart_id;
     public $product;
-    public $features;
     public $featuresValues;
     public $quantity;
 

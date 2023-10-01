@@ -50,4 +50,16 @@ class CartRepository
 
         return $cart;
     }
+
+    public function findByGuestsKey($key): Cart|null
+    {
+         $cart = $this->repo->createQueryBuilder('c')
+                ->select('c')
+                ->innerJoin('c.owner', 'o')
+                ->andWhere('o.guests_key = :guests_key')
+                ->setParameter('guests_key', $key)
+                ->getQuery()->setMaxResults(1)->getOneOrNullResult();
+
+        return $cart;
+    }
 }

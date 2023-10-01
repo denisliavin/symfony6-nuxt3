@@ -74,11 +74,26 @@ class CartItem
 
     public function plus($quantity)
     {
-        return new static($this->id, $this->cart, $this->product, $this->quantity + $quantity, $this->featuresValues);
+        $this->quantity = $this->quantity + $quantity;
     }
 
     public function changeQuantity($quantity)
     {
-        return new static($this->id, $this->cart, $this->product, $quantity, $this->featuresValues);
+        $this->quantity = $quantity;
+    }
+
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
+
+    public function getFeaturesValues(): ArrayCollection|Collection
+    {
+        return $this->featuresValues;
+    }
+
+    public function getCart(): Cart
+    {
+        return $this->cart;
     }
 }

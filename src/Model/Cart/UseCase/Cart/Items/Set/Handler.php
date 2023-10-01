@@ -21,9 +21,10 @@ class Handler
 
     public function handle(Command $command): void
     {
-        $cart = $this->carts->get($command->id->value->getValue());
+        $cart = $this->carts->get($command->cart);
 
-        $cart->edit($command->coupon);
+        $cart->set($command->id, intval($command->quantity));
+
         $this->flusher->flush();
     }
 }

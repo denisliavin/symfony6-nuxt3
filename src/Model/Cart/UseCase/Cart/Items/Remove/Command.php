@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace App\Model\Cart\UseCase\Cart\Items\Remove;
 
-use Symfony\Component\Validator\Constraints as Assert;
-
 class Command
 {
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     */
+    public $cart_id;
     public $id;
 
     public function __construct(string $id)
     {
+        $this->cart_id = $_GET['cart_id'];
         $this->id = $id;
     }
 

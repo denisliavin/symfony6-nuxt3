@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin\User\Cart;
 
+use App\Controller\Admin\Product\ProductCrudController;
 use App\Model\Cart\UseCase\Cart\Items;
 use App\Controller\Admin\AbstractCrudController;
 use App\Model\Cart\Entity\CartItem\CartItem;
@@ -15,11 +16,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
@@ -30,7 +29,7 @@ class CartItemCrudController extends AbstractCrudController
     public $removeHandler;
 
     public function __construct(
-        Items\Add\Handler $createHandler,
+        Items\Add\Manual\Handler $createHandler,
         Items\Set\Handler $setHandler,
         Items\Remove\Handler $removeHandler
     )
@@ -59,7 +58,7 @@ class CartItemCrudController extends AbstractCrudController
 
     public function getNewCommand()
     {
-        return new Items\Add\Command();
+        return new Items\Add\Manual\Command();
     }
 
     public function getEditCommand($id)
@@ -101,9 +100,7 @@ class CartItemCrudController extends AbstractCrudController
                 ->linkToUrl($url)->createAsGlobalAction();
 
             $actions->add(Crud::PAGE_INDEX, $toCart);
-        }
 
-        if ($_GET['cart_id']) {
             $url = $this->container->get(AdminUrlGenerator::class)
                 ->setController(CartItemCrudController::class)
                 ->setAction(Action::NEW)
@@ -111,6 +108,16 @@ class CartItemCrudController extends AbstractCrudController
                 ->generateUrl();
 
             $actions->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) use ($url) {
+                return $action->linkToUrl($url);
+            });
+
+            $url = $this->container->get(AdminUrlGenerator::class)
+                ->setController(CartItemCrudController::class)
+                ->setAction(Action::DELETE)
+                ->set('cart_id', $_GET['cart_id'])
+                ->generateUrl();
+
+            $actions->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) use ($url) {
                 return $action->linkToUrl($url);
             });
         }
@@ -123,7 +130,8 @@ class CartItemCrudController extends AbstractCrudController
         if (Crud::PAGE_INDEX === $pageName) {
             return [
                 IdField::new('id'),
-                AssociationField::new('product'),
+                AssociationField::new('product')->setCrudController(ProductCrudController::class),
+                AssociationField::new('featuresValues')->setCrudController(ProductCrudController::class),
                 NumberField::new('quantity')
             ];
         } elseif(Crud::PAGE_NEW === $pageName) {
@@ -134,16 +142,8 @@ class CartItemCrudController extends AbstractCrudController
             ];
         } else {
             return [
-                TextField::new('info.name'),
-                TextareaField::new('info.description')->setMaxLength(1000),
-                TextareaField::new('info.specification')->setMaxLength(1000),
-                NumberField::new('price.old')->setNumDecimals(2),
-                NumberField::new('price.new')->setNumDecimals(2),
-                TextField::new('slug'),
-                AssociationField::new('category')->autocomplete(),
-                AssociationField::new('brand')->autocomplete()->setRequired(false),
-                AssociationField::new('tag')->autocomplete()->setRequired(false),
-                AssociationField::new('featuresValues')->autocomplete()->setRequired(false)
+                NumberField::new('quantity'),
+                HiddenField::new('cart')
             ];
         }
     }

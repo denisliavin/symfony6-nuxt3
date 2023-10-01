@@ -48,7 +48,7 @@ class Cart
 
         foreach ($this->items as $i => $current) {
             if ($current->getCompositeId() == $item->getCompositeId()) {
-                $this->items[$i] = $current->plus($item->getQuantity());
+                $current->plus($item->getQuantity());
                 return;
             }
         }
@@ -58,8 +58,8 @@ class Cart
     public function set($id, $quantity): void
     {
         foreach ($this->items as $i => $current) {
-            if ($current->getId() == $id) {
-                $this->items[$i] = $current->changeQuantity($quantity);
+            if ($current->getId()->getValue() == $id) {
+                $current->changeQuantity($quantity);
                 return;
             }
         }
@@ -100,5 +100,10 @@ class Cart
     public function getCoupon(): ?Coupon
     {
         return $this->coupon;
+    }
+
+    public function __toString()
+    {
+        return $this->getId()->getValue();
     }
 }

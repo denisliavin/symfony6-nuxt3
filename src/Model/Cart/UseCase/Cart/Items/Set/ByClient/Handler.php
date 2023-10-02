@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Cart\UseCase\Cart\Items\Set;
+namespace App\Model\Cart\UseCase\Cart\Items\Set\ByClient;
 
 use App\Model\Cart\Entity;
 use App\Model\Cart\Entity\Cart\CartRepository;
@@ -21,9 +21,9 @@ class Handler
 
     public function handle(Command $command): void
     {
-        $cart = $this->carts->get($command->cart);
+        $cart = $this->carts->findByIdOrKey($command->user_id, $command->key);
 
-        $cart->set($command->id, intval($command->quantity));
+        $cart->set($command->item_id, $command->quantity);
 
         $this->flusher->flush();
     }

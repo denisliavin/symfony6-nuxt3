@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Cart\UseCase\Cart\Items\Remove;
+namespace App\Model\Cart\UseCase\Cart\Items\Remove\Manual;
 
 class Command
 {

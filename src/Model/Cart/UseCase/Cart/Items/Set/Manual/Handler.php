@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Cart\UseCase\Cart\Items\Remove;
+namespace App\Model\Cart\UseCase\Cart\Items\Set\Manual;
 
-use App\Model\Cart\Entity\CartItem\Id;
+use App\Model\Cart\Entity;
 use App\Model\Cart\Entity\Cart\CartRepository;
 use App\Model\Flusher;
 
@@ -21,9 +21,9 @@ class Handler
 
     public function handle(Command $command): void
     {
-        $cart = $this->carts->get($command->cart_id);
+        $cart = $this->carts->get($command->cart);
 
-        $cart->remove(new Id($command->id));
+        $cart->set($command->id, intval($command->quantity));
 
         $this->flusher->flush();
     }

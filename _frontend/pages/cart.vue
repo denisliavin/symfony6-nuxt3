@@ -29,96 +29,26 @@
                                 </tr>
                             </thead>
                             <tbody class="align-middle">
-                                <tr>
+                                <tr v-for="item in cartStore.items">
                                     <td>
                                         <div class="img">
-                                            <a href="#"><img src="img/product-1.jpg" alt="Image"></a>
-                                            <p>Product Name</p>
+                                            <a :href="'/product' + item.slug"><img :src="item.image_src" alt="Image"></a>
+                                            <p>{{ item.name }}</p>
                                         </div>
                                     </td>
-                                    <td>$99</td>
+                                    <td>${{ item.price }}</td>
                                     <td>
                                         <div class="qty">
-                                            <button class="btn-minus"><i class="fa fa-minus"></i></button>
-                                            <input type="text" value="1">
-                                            <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                            <button @click.prevent="changeQuantity(item.id, item.quantity - 1)" class="btn-minus"><i class="fa fa-minus"></i></button>
+                                            <input @input="changeQuantity(item.id, $event.target.value)" type="text" :value="item.quantity">
+                                            <button @click.prevent="changeQuantity(item.id, item.quantity + 1)" class="btn-plus"><i class="fa fa-plus"></i></button>
                                         </div>
                                     </td>
-                                    <td>$99</td>
-                                    <td><button><i class="fa fa-trash"></i></button></td>
+                                    <td>${{ item.price * item.quantity }}</td>
+                                    <td>
+                                        <button @click.prevent="remove(item.id)"><i class="fa fa-trash"></i></button></td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <div class="img">
-                                            <a href="#"><img src="img/product-2.jpg" alt="Image"></a>
-                                            <p>Product Name</p>
-                                        </div>
-                                    </td>
-                                    <td>$99</td>
-                                    <td>
-                                        <div class="qty">
-                                            <button class="btn-minus"><i class="fa fa-minus"></i></button>
-                                            <input type="text" value="1">
-                                            <button class="btn-plus"><i class="fa fa-plus"></i></button>
-                                        </div>
-                                    </td>
-                                    <td>$99</td>
-                                    <td><button><i class="fa fa-trash"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="img">
-                                            <a href="#"><img src="img/product-3.jpg" alt="Image"></a>
-                                            <p>Product Name</p>
-                                        </div>
-                                    </td>
-                                    <td>$99</td>
-                                    <td>
-                                        <div class="qty">
-                                            <button class="btn-minus"><i class="fa fa-minus"></i></button>
-                                            <input type="text" value="1">
-                                            <button class="btn-plus"><i class="fa fa-plus"></i></button>
-                                        </div>
-                                    </td>
-                                    <td>$99</td>
-                                    <td><button><i class="fa fa-trash"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="img">
-                                            <a href="#"><img src="img/product-4.jpg" alt="Image"></a>
-                                            <p>Product Name</p>
-                                        </div>
-                                    </td>
-                                    <td>$99</td>
-                                    <td>
-                                        <div class="qty">
-                                            <button class="btn-minus"><i class="fa fa-minus"></i></button>
-                                            <input type="text" value="1">
-                                            <button class="btn-plus"><i class="fa fa-plus"></i></button>
-                                        </div>
-                                    </td>
-                                    <td>$99</td>
-                                    <td><button><i class="fa fa-trash"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="img">
-                                            <a href="#"><img src="img/product-5.jpg" alt="Image"></a>
-                                            <p>Product Name</p>
-                                        </div>
-                                    </td>
-                                    <td>$99</td>
-                                    <td>
-                                        <div class="qty">
-                                            <button class="btn-minus"><i class="fa fa-minus"></i></button>
-                                            <input type="text" value="1">
-                                            <button class="btn-plus"><i class="fa fa-plus"></i></button>
-                                        </div>
-                                    </td>
-                                    <td>$99</td>
-                                    <td><button><i class="fa fa-trash"></i></button></td>
-                                </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -138,7 +68,7 @@
                                 <div class="cart-content">
                                     <h1>Cart Summary</h1>
                                     <p>Sub Total<span>$99</span></p>
-                                    <p>Shipping Cost<span>$1</span></p>
+                                    <p>Discount<span>$1</span></p>
                                     <h2>Grand Total<span>$100</span></h2>
                                 </div>
                                 <div class="cart-btn">
@@ -156,3 +86,21 @@
 <!-- Cart End -->
 
 </template>
+<script setup>
+import { onMounted } from "vue";
+import { useCartStore } from '~/store/cart';
+const cartStore = useCartStore()
+
+onMounted(() => {
+    cartStore.setItems()
+})
+
+const changeQuantity = (item_id, quantity) => {
+    quantity = quantity > 1 ? quantity : 1
+    cartStore.changeQuantity(item_id, quantity)
+};
+
+const remove = (item_id) => {
+    cartStore.removeItem(item_id)
+};
+</script>

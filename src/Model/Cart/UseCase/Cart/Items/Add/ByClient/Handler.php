@@ -35,11 +35,7 @@ class Handler
 
     public function handle(Command $command): void
     {
-        if ($command->user_id) {
-            $cart = $this->carts->findByUserId($command->user_id);
-        } else {
-            $cart = $this->carts->findByGuestsKey($command->key);
-        }
+        $cart = $this->carts->findByIdOrKey($command->user_id, $command->key);
 
         if (!$cart) {
             $owner = new CartOwner(Entity\CartOwner\Id::next(), $command->key, $command->user_id);

@@ -34,7 +34,7 @@ class UserCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         if (isset($_GET['entityId'])) {
-            $cart = $this->cartRepository->findByUserId($_GET['entityId']);
+            $cart = $this->cartRepository->findByIdOrKey($_GET['entityId'], null);
             if ($cart) {
                 $url = $this->container->get(AdminUrlGenerator::class)
                     ->setController(CartCrudController::class)

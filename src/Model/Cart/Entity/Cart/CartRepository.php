@@ -39,27 +39,24 @@ class CartRepository
         $this->em->remove($cart);
     }
 
-    public function findByUserId($userId): Cart|null
+    public function findByIdOrKey($userId, $guests_key): Cart|null
     {
-         $cart = $this->repo->createQueryBuilder('c')
+        if (!$userId && !$guests_key) {
+            return null;
+        }
+
+         $query = $this->repo->createQueryBuilder('c')
                 ->select('c')
-                ->innerJoin('c.owner', 'o')
-                ->andWhere('o.user_id = :id')
-                ->setParameter('id', $userId)
-                ->getQuery()->setMaxResults(1)->getOneOrNullResult();
+                ->innerJoin('c.owner', 'o');
 
-        return $cart;
-    }
+         if ($userId) {
+             $query->andWhere('o.user_id = :id')->setParameter('id', $userId);
+         }
 
-    public function findByGuestsKey($key): Cart|null
-    {
-         $cart = $this->repo->createQueryBuilder('c')
-                ->select('c')
-                ->innerJoin('c.owner', 'o')
-                ->andWhere('o.guests_key = :guests_key')
-                ->setParameter('guests_key', $key)
-                ->getQuery()->setMaxResults(1)->getOneOrNullResult();
+        if ($guests_key) {
+            $query->andWhere('o.guests_key = :guests_key')->setParameter('guests_key', $guests_key);
+        }
 
-        return $cart;
+        return $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
     }
 }

@@ -19,7 +19,7 @@
             </div>
             <div class="product-price">
                 <h3><span>$</span>{{ props.product.price }}</h3>
-                <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                <a @click.prevent="byNow" class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
             </div>
         </div>
     </div>
@@ -42,6 +42,11 @@ const rating = computed(() => {
 
 const addToCart = () => {
     cartStore.add(props.product.id, [])
+};
+
+const byNow = () => {
+    cartStore.add(props.product.id, [])
+    navigateTo('/cart')
 };
 
 </script>

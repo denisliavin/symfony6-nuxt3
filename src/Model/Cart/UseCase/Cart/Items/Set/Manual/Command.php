@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Cart\UseCase\Cart\Items\Set;
+namespace App\Model\Cart\UseCase\Cart\Items\Set\Manual;
 
 class Command
 {

@@ -100,11 +100,6 @@ class ProductFetcher
             $qb->orderBy('p.' . $sort, $direction);
         }
 
-
-        //dd($qb->getSQL());
-        //dd($qb->fetchAllAssociative());
-
-
         $pagination = $this->paginator->paginate($qb, $page, $size);
 
 

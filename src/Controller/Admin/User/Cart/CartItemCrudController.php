@@ -30,8 +30,8 @@ class CartItemCrudController extends AbstractCrudController
 
     public function __construct(
         Items\Add\Manual\Handler $createHandler,
-        Items\Set\Handler $setHandler,
-        Items\Remove\Handler $removeHandler
+        Items\Set\Manual\Handler $setHandler,
+        Items\Remove\Manual\Handler $removeHandler
     )
     {
         $this->setHandler = $setHandler;
@@ -63,12 +63,12 @@ class CartItemCrudController extends AbstractCrudController
 
     public function getEditCommand($id)
     {
-        return new Items\Set\Command($id);
+        return new Items\Set\Manual\Command($id);
     }
 
     public function getRemoveCommand($id)
     {
-        return new Items\Remove\Command($id);
+        return new Items\Remove\Manual\Command($id);
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $command): void
